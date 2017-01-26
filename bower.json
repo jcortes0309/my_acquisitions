@@ -1,0 +1,26 @@
+{
+  "name": "my_acquisitions",
+  "description": "Online tool used to track and analyze potential target companies",
+  "main": "server.js",
+  "authors": [
+    "Juan A Cortes"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/jcortes0309/my_acquisitions",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-cookies": "^1.6.1",
+    "angular-moment": "^1.0.1",
+    "angular-ui-router": "^0.4.2",
+    "bootcards": "^1.1.2",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0"
+  }
+}
