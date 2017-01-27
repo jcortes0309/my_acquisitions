@@ -146,6 +146,54 @@ app.post("/user/register", function(request, response) {
     });
 });
 
+app.post("/user/login", function(request, response) {
+  let username = request.body.username;
+  let verify_password = request.body.password;
+
+  User.findOne({ username: username })
+    .then(function(user) {
+      let hash = user.password;
+      // Load hash from your password DB and compare to password provided by user
+      return bcrypt.compare(verify_password, hash)
+        .then(function(response) {
+          if (response) {
+            // Create token for user
+            var token = uuidV4();
+            // Add token to user and grab information to send to the front end
+            return bluebird.all([
+              token,
+              User.update(
+                { username: username },
+                {
+                  $set: {
+                    token: token,
+                    updated_on: new Date()
+                  }
+                }
+              )
+            ]);
+          } else {
+            throw new Error("You are not allowed to enter");
+          }
+        });
+    })
+    .then(function(result) {
+      let token = result[0];
+      User.findOne({ token: token })
+        .then(function(updated_user) {
+          response.json({
+            user: updated_user
+          });
+        });
+    })
+    .catch(function(error) {
+      response.status(401) ;
+      response.json({
+        message: "Error trying to login"
+      });
+    });
+});
+
 
 
 
