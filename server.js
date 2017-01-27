@@ -112,6 +112,66 @@ const User = mongoose.model("User", {
   }
 });
 
+const Company = mongoose.model("Company", {
+  name: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String
+  },
+  website: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
+  address: {
+    type: String
+  },
+  address2: {
+    type: String
+  },
+  city: {
+    type: String
+  },
+  state: {
+    type: String
+  },
+  zip_code: {
+    type: String
+  },
+  industry: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  contacts: [{
+    type: mongoose.Schema.Types.ObjectId
+  }],
+  ownerID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  created_on: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  updated_on: {
+    type: Date,
+    default: Date.now
+  },
+  updated_by: {
+    type: mongoose.Schema.Types.ObjectId
+  }
+});
+
 
 ////////////////////////////
 ////////// ROUTES //////////
@@ -193,6 +253,45 @@ app.post("/user/login", function(request, response) {
       });
     });
 });
+
+////////// COMPANY //////////
+app.post("/company/track", function(request, response) {
+  let userID = request.body.userID;
+  console.log("This is the request sent from the front end: ", request.body);
+
+  let newCompany = new Company({
+    name: request.body.companyInformation.name,
+    status: request.body.companyInformation.status,
+    website: request.body.companyInformation.website,
+    phone: request.body.companyInformation.phone,
+    address: request.body.companyInformation.address,
+    address2: request.body.companyInformation.address2,
+    city: request.body.companyInformation.city,
+    state: request.body.companyInformation.state,
+    zip_code: request.body.companyInformation.zip_code,
+    description: request.body.companyInformation.description,
+    ownerID: userID,
+    created_on: new Date(),
+    created_by: userID
+  });
+
+  newCompany.save()
+    .then(function(result) {
+      console.log("Company created successfully: ", result);
+      response.json({
+        status: 200,
+        message: "Company created successfully"
+      });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("\n\n\n");
+      console.log("Didn't create Company because: ", error);
+    });
+
+
+});
+
 
 
 

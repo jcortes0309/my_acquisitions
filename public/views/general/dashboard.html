@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<div class="container">
+<div class="container-fluid">
 
   <form class="form-horizontal" ng-submit="trackTargetCompany()">
     <fieldset>
@@ -8,7 +8,7 @@
       <div class="form-group">
         <label for="company_name" class="col-sm-3 control-label">Company Name</label>
         <div class="col-sm-7">
-          <input ng-model="tracker.company_name" name="company_name" type="text" class="form-control" id="company_name" placeholder="Company Name" required="">
+          <input ng-model="tracker.company_name" name="company_name" type="text" class="form-control" id="company_name" title="Please add a company name"  placeholder="Company Name" required="">
         </div>
       </div>
 
@@ -30,5 +30,5 @@
 
     </fieldset>
   </form>
-
+  
 </div>

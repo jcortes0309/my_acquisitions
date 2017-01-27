@@ -34,7 +34,15 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <!-- <li><a ui-sref="users">Users</a></li> -->
+            <li>
+              <a ui-sref="dashboard" ng-show="logged_user">Dashboard</a>
+            </li>
+            <li>
+              <a ui-sref="companies" ng-show="logged_user">Companies</a>
+            </li>
+            <li>
+              <a ui-sref="track_company" ng-show="logged_user">Track Company</a>
+            </li>
             <li>
               <a ui-sref="register" ng-hide="logged_user">Register</a>
             </li>

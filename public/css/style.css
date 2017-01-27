@@ -1,10 +1,27 @@
 /*
- * Navigation Bar Styles
+ * General Styles
  */
 body {
+  /*margin-top: 75px;*/
   background-color: #FFF;
 }
 
+textarea {
+  width: 100%;
+}
+
+select {
+  height: 25px;
+}
+
+.spacer {
+  margin-bottom: 15px;
+}
+
+
+/*
+ * Navigation Bar Styles
+ */
  /* Force navbar brand color to white */
 .navbar-header .navbar-brand {
   color: #FFF

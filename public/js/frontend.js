@@ -37,7 +37,7 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Register a user
   service.register = function(user_registration) {
-    console.log("In the factory with the user_registration info: ", user_registration);
+    // console.log("In the factory with the user_registration info: ", user_registration);
     return $http({
       method: "POST",
       url: "/user/register",
@@ -47,11 +47,28 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Login a user
   service.login = function(login_information) {
-    console.log("In the factory with the login_information info: ", login_information);
+    // console.log("In the factory with the login_information info: ", login_information);
     return $http({
       method: "POST",
       url: "/user/login",
       data: login_information
+    });
+  };
+
+
+  /////////////////////////////////////
+  ////////// COMPANY FACTORY //////////
+  /////////////////////////////////////
+  // Track a company
+  service.trackCompany = function(userID, companyInformation) {
+    console.log("In the factory with: ", companyInformation);
+    return $http({
+      method: "POST",
+      url: "/company/track",
+      data: {
+        userID: userID,
+        companyInformation: companyInformation
+      }
     });
   };
 
@@ -65,14 +82,18 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 ////////// CONTROLLERS //////////
 /////////////////////////////////
 
-////////// HOME CONTROLLER //////////
+////////// GENERAL CONTROLLERS //////////
 app.controller("HomeController", function($state) {
-  console.log("Inside the HomeController");
+
 });
 
-app.controller("RegisterController", function($scope, $state, AT_Factory) {
-  console.log("Using the RegisterController");
+app.controller("DashboardController", function($state) {
+  console.log("Inside the DashboardController");
+});
 
+
+////////// USER CONTROLLERS //////////
+app.controller("RegisterController", function($scope, $state, AT_Factory) {
   $scope.user = {};
 
   $scope.register = function() {
@@ -80,7 +101,7 @@ app.controller("RegisterController", function($scope, $state, AT_Factory) {
       var user_registration = $scope.user;
       delete user_registration.password2;
       $scope.user = {};
-      console.log("This is the user_registration: ", user_registration);
+      // console.log("This is the user_registration: ", user_registration);
       AT_Factory.register(user_registration)
         .then(function(success) {
           $state.go("login");
@@ -101,19 +122,40 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
   };
   $scope.login = function() {
     var login_information = $scope.user;
-    console.log(login_information);
     AT_Factory.login(login_information)
       .then(function(logged_user) {
-        console.log("We were successful: ", logged_user);
+        // console.log("We were successful: ", logged_user);
         $cookies.putObject("at_cd", logged_user);
         $rootScope.at_cd = logged_user;
         $rootScope.logged_user = $rootScope.at_cd.data.user;
-        $state.go("home");
+        $state.go("dashboard");
       })
       .catch(function(error) {
         console.log("There was an error!!!", error);
       });
   };
+});
+
+////////// USER CONTROLLERS //////////
+app.controller("TrackCompanyController", function($state, $scope, AT_Factory) {
+  $scope.trackCompany = function() {
+  var company_information = $scope.company;
+  console.log("Company information: ", company_information);
+  var userID = $scope.logged_user._id;
+  AT_Factory.trackCompany(userID, company_information)
+    .then(function(success) {
+      console.log("We were successful: ", success);
+      $state.go("companies");
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+};
+
+});
+
+app.controller("CompaniesController", function($state) {
+  console.log("Hi from the CompaniesController");
 });
 
 
@@ -125,8 +167,14 @@ app.config(function($stateProvider, $urlRouterProvider) {
   .state({
     name: "home",
     url: "/",
-    templateUrl: "views/home.html",
+    templateUrl: "views/general/home.html",
     controller: "HomeController"
+  })
+  .state({
+    name: "dashboard",
+    url: "/dashboard",
+    templateUrl: "views/general/dashboard.html",
+    controller: "DashboardController"
   })
   .state({
     name: "register",
@@ -139,6 +187,18 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/User/login",
     templateUrl: "views/user/login.html",
     controller: "LoginController"
+  })
+  .state({
+    name: "companies",
+    url: "/Companies",
+    templateUrl: "views/company/companies.html",
+    controller: "CompaniesController"
+  })
+  .state({
+    name: "track_company",
+    url: "/Company/track",
+    templateUrl: "views/company/track_company.html",
+    controller: "TrackCompanyController"
   })
   ;
 
