@@ -1,6 +1,10 @@
 /*
  * Navigation Bar Styles
  */
+body {
+  background-color: #FFF;
+}
+
  /* Force navbar brand color to white */
 .navbar-header .navbar-brand {
   color: #FFF
@@ -17,6 +21,36 @@ i.fa-bars {
   color: #FFF;
 }
 
+
+/*
+ * Login / Register Styles
+ */
+/* Title with line */
+.login_register_title {
+  text-align: center;
+  border-bottom: 1px solid #DDD;
+  line-height: 0;
+  padding: 0;
+  margin-bottom: 50px;
+}
+
+.login_register_title span {
+  background: #FFF;
+  padding: 0 35px;
+}
+
+.input-group .input-group-addon {
+  height: 35px;
+}
+
+.form-control.login_register_input {
+  height: 36px;
+}
+
+.fa-exclamation-circle {
+  color: red;
+  padding-left: 10px;
+}
 
 /*
  * Footer Styles

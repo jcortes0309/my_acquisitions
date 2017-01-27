@@ -72,51 +72,79 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //////////////////////////
 
 ///////// USER MODEL /////////
-// const User = mongoose.model("User", {
-//   salutation: {
-//     type: String
-//   },
-//   first_name: {
-//     type: String
-//   },
-//   middle_name: {
-//     type: String
-//   },
-//   last_name: {
-//     type: String
-//   },
-//   username: {
-//     type: String,
-//     index: true,
-//     unique: true,
-//     required: true,
-//     lowercase: true,
-//     trim: true
-//   },
-//   email: {
-//     type: String,
-//     required: true
-//   },
-//   password: {
-//     type: String,
-//     required: true
-//   },
-//   profileimage: {
-//     type: String
-//   },
-//   token: {
-//     type: String
-//   },
-//   created_on: {
-//     type: Date,
-//     required: true,
-//     default: Date.now
-//   },
-//   updated_on: {
-//     type: Date,
-//     default: Date.now
-//   }
-// });
+const User = mongoose.model("User", {
+  first_name: {
+    type: String
+  },
+  last_name: {
+    type: String
+  },
+  username: {
+    type: String,
+    index: true,
+    unique: true,
+    required: true,
+    lowercase: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  profileimage: {
+    type: String
+  },
+  token: {
+    type: String
+  },
+  created_on: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  updated_on: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+
+////////////////////////////
+////////// ROUTES //////////
+////////////////////////////
+
+////////// USER //////////
+app.post("/user/register", function(request, response) {
+  // console.log("Here is the registration information: ", request.body);
+  let password = request.body.password;
+
+  bcrypt.hash(password, saltRounds)
+    .then(function(hash) {
+      let newRegistration = new User({
+        username: request.body.username,
+        email: request.body.email,
+        password: hash
+      });
+
+      newRegistration.save()
+        .then(function(result) {
+          console.log("Saved successfully: ", result);
+          response.json({
+            message: "Registered user successfully"
+          });
+        });
+    })
+    .catch(function(error) {
+      console.log("Didn't save because: ", error.stack);
+      response.json({
+        message: "Error message: " + error.stack
+      });
+    });
+});
 
 
 
