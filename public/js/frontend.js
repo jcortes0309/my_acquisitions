@@ -80,6 +80,15 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
     });
   };
 
+  // View company
+  service.viewCompany = function(companyID) {
+    console.log("companyID: ", companyID);
+    return $http({
+      method: "GET",
+      url: "/company/view/" + companyID,
+    });
+  };
+
 
 
   return service;
@@ -145,24 +154,7 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
 });
 
 ////////// USER CONTROLLERS //////////
-app.controller("TrackCompanyController", function($state, $scope, AT_Factory) {
-  $scope.trackCompany = function() {
-  var company_information = $scope.company;
-  console.log("Company information: ", company_information);
-  var userID = $scope.logged_user._id;
-  AT_Factory.trackCompany(userID, company_information)
-    .then(function(success) {
-      console.log("We were successful: ", success);
-      $state.go("companies");
-    })
-    .catch(function(error) {
-      console.log("There was an error!!!", error.stack);
-    });
-};
-
-});
-
-app.controller("CompaniesController", function($state, $scope, AT_Factory) {
+app.controller("CompaniesController", function($scope, $state, AT_Factory) {
   $scope.trackCompany = function() {
     console.log("Clicked the trackCompany button");
     $state.go("track_company");
@@ -176,6 +168,42 @@ app.controller("CompaniesController", function($state, $scope, AT_Factory) {
       console.log("There was an error!!!", error.stack);
     });
 
+});
+
+app.controller("TrackCompanyController", function($scope, $state, AT_Factory) {
+  $scope.trackCompany = function() {
+  var company_information = $scope.company;
+  console.log("Company information: ", company_information);
+  var userID = $scope.logged_user._id;
+  AT_Factory.trackCompany(userID, company_information)
+    .then(function(success) {
+      console.log("We were successful: ", success);
+      $state.go("companies");
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+  };
+
+});
+
+app.controller("ViewCompanyController", function($scope, $state, $stateParams, AT_Factory) {
+  var companyID = $stateParams.companyID;
+
+  // Scroll to top when loading page (need this when coming from a contact)
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+  // $state.go("view_company.financial_performance");
+
+  AT_Factory.viewCompany(companyID)
+    .then(function(company) {
+      console.log("The company is: ", company);
+      $scope.company = company.data.company;
+      $scope.companyOwner = company.data.companyOwner;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
 });
 
 
@@ -219,6 +247,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/Company/track",
     templateUrl: "views/company/track_company.html",
     controller: "TrackCompanyController"
+  })
+  .state({
+    name: "view_company",
+    url: "/Company/view/{companyID}",
+    templateUrl: "views/company/view_company.html",
+    controller: "ViewCompanyController"
   })
   ;
 

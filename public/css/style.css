@@ -24,26 +24,6 @@ select {
 
 
 /*
- * Navigation Bar Styles
- */
- /* Force navbar brand color to white */
-.navbar-header .navbar-brand {
-  color: #FFF
-}
-
-/* Change cursor to a pointer when hovering over the logout button */
-#logout {
-  cursor: pointer;
-}
-
-/* Force fa-bars brand color to white */
-button.navbar-toggle span,
-i.fa-bars {
-  color: #FFF;
-}
-
-
-/*
  * Login / Register Styles
  */
 /* Title with line */
@@ -72,6 +52,66 @@ i.fa-bars {
   color: red;
   padding-left: 10px;
 }
+
+
+/*
+ * Navigation Bar Styles
+ */
+ /* Force navbar brand color to white */
+.navbar-header .navbar-brand {
+  color: #FFF
+}
+
+/* Change cursor to a pointer when hovering over the logout button */
+#logout {
+  cursor: pointer;
+}
+
+/* Force fa-bars brand color to white */
+button.navbar-toggle span,
+i.fa-bars {
+  color: #FFF;
+}
+
+
+/*
+ * Views Styles
+ */
+.padding-left {
+  padding-left: 0;
+}
+
+.information {
+  margin-top: 25px;
+}
+
+.information-no-top-margin {
+  margin-top: 0px;
+}
+
+.view-details {
+  padding-left: 5px;
+}
+
+.view-details li {
+  list-style: none;
+}
+
+.details {
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+
+.details-info {
+  display: block;
+  margin-left: 22px;
+  color: black;
+}
+
+.sidebar {
+  border-right: 1px solid darkgrey;
+}
+
 
 /*
  * Footer Styles

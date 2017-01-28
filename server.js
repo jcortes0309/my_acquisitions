@@ -178,6 +178,7 @@ const Company = mongoose.model("Company", {
 ////////////////////////////
 
 ////////// USER //////////
+////////// Register user //////////
 app.post("/user/register", function(request, response) {
   // console.log("Here is the registration information: ", request.body);
   let password = request.body.password;
@@ -206,6 +207,7 @@ app.post("/user/register", function(request, response) {
     });
 });
 
+////////// Login user //////////
 app.post("/user/login", function(request, response) {
   let username = request.body.username;
   let verify_password = request.body.password;
@@ -255,6 +257,7 @@ app.post("/user/login", function(request, response) {
 });
 
 ////////// COMPANY //////////
+////////// View Companies //////////
 app.get("/companies/view", function(request, response) {
   console.log("In the backend trying to see the companies");
   Company.find({})
@@ -272,6 +275,7 @@ app.get("/companies/view", function(request, response) {
     });
 });
 
+////////// Track a company //////////
 app.post("/company/track", function(request, response) {
   let userID = request.body.userID;
   console.log("This is the request sent from the front end: ", request.body);
@@ -306,7 +310,27 @@ app.post("/company/track", function(request, response) {
       console.log("Didn't create Company because: ", error);
     });
 
+});
 
+////////// View company //////////
+app.get("/company/view/:companyID", function(request, response) {
+  let companyID = request.params.companyID;
+
+  return Company.findById(companyID)
+    .then(function(company) {
+      return User.findById(company.created_by)
+        .then(function(user) {
+          console.log("This is the user: ", user);
+          response.json({
+            company: company,
+            companyOwner: user
+          });
+        });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("There was an error looking for that company: ", error.stack);
+    });
 });
 
 

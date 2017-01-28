@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4><a ui-sref="companies">Companies </a>&gt;&gt; {{ company.name }}</h4>
+
+      <!-- Split button -->
+      <div class="btn-group">
+        <button ui-sref="edit_company({companyID: company._id})" class="btn btn-primary btn-sm" type="button" name="edit_btn">Edit</button>
+        <!-- <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a ui-sref="">Delete</a></li>
+        </ul> -->
+      </div>
+
+      <hr>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="row">
+
+      	<div class="col-sm-4 sidebar">
+
+      		<div class="row">
+
+      			<div class="col-xs-12">
+
+              <div class="col-sm-12 padding-left">
+                <!-- Change the class information-no-top-margin to information after adding an image -->
+                <h4 class="information-no-top-margin">General Information</h4>
+        				<ul class="view-details">
+        					<li ng-show="company.website">
+        						<div class="details">
+                      <i class="fa fa-briefcase fa-fw"></i>
+                      website
+                      <span class="details-info">
+                        <a href="{{ company.website }}" target="_blank">{{ company.website }}</a>
+                      </span>
+                    </div>
+        					</li>
+                  <li ng-show="company.status" >
+                    <div class="details">
+                      <i class="fa fa-tag fa-fw"></i> status
+                      <span class="details-info">
+                        {{ company.status }}
+                      </span>
+                    </div>
+                  </li>
+                  <li ng-show="company.description">
+                    <div class="details">
+                      <i class="fa fa-align-justify fa-fw"></i> description
+                      <span class="details-info">
+                        {{ company.description }}
+                      </span>
+                    </div>
+                  </li>
+        				</ul>
+              </div>
+
+              <div class="col-sm-12 padding-left">
+                <h4 class="information">Company Information</h4>
+                <ul class="view-details">
+                  <li ng-show="company.phone.length > 0">
+                    <div class="details">
+                      <i class="fa fa-phone fa-fw"></i>
+                      phone
+                      <span class="details-info">
+                        {{ company.phone }}
+                      </span>
+                    </div>
+                  </li>
+                  <li ng-show="company.address">
+                    <div class="details"><i class="fa fa-map-marker fa-fw"></i>
+                      address
+                      <span class="details-info">
+                        <span ng-show="company.address">
+                          {{ company.address }}<br>
+                        </span>
+                        <span ng-show="company.address2">
+                          {{ company.address2 }}<br>
+                        </span>
+                        {{ company.city }}, {{ company.state }} {{ company.zip_code }}
+                      </span>
+                    </div>
+                  </li>
+                  <li ng-show="company.ownerID">
+                    <div class="details">
+                      <i class="fa fa-user-o fa-fw"></i>
+                      company owner
+                      <span ng-show="companyOwner.first_name" class="details-info">
+                        <a ui-sref="view_user({userID: company.ownerID})">
+                          {{ companyOwner.salutation }} {{ companyOwner.first_name }} {{ companyOwner.last_name }}
+                        </a>
+                      </span>
+                      <span ng-hide="companyOwner.first_name" class="details-info">
+                        <a ui-sref="view_user({userID: company.ownerID})">
+                          {{ companyOwner.username }}
+                        </a>
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div ng-if="company.contacts.length > 0" class="col-sm-12 padding-left">
+                <h4 class="information">Contacts Information</h4>
+
+                <ul class="view-details">
+                  <li>
+                    <div class="details">
+                      <i class="fa fa-users fa-fw"></i> contact(s)
+                      <span ng-repeat="contact in company_contacts" class="details-info">
+                        <a ui-sref="view_contact({contactID: contact._id})">
+                          {{ contact.salutation }} {{ contact.first_name }} {{ contact.last_name }}
+                        </a>
+                      </span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+      			</div>
+      		</div><!--/row-->
+
+      	</div><!--/.col-sm-4-->
+
+      	<div class="col-sm-8">
+          <hr class="visible-xs">
+
+          <ul class="nav nav-pills">
+            <li role="presentation" ui-sref="view_company.financial_performance" ui-sref-active="active">
+              <a>Financial Performance</a>
+            </li>
+          </ul>
+
+          <div class="container-fluid">
+            <div class="nested-view">
+              <ui-view></ui-view>
+            </div>
+          </div>
+
+      	</div><!-- /.col-sm-8 -->
+
+      </div><!-- /.row -->
+
+    </div>
+
+  </div>
+  <!-- /.row -->
+</div>
