@@ -255,6 +255,23 @@ app.post("/user/login", function(request, response) {
 });
 
 ////////// COMPANY //////////
+app.get("/companies/view", function(request, response) {
+  console.log("In the backend trying to see the companies");
+  Company.find({})
+    .then(function(companies) {
+      console.log("Here are the companies: ", companies);
+      response.json({
+        companies: companies
+      });
+    })
+    .catch(function(error) {
+      response.status(500) ;
+      response.json({
+        message: "Error trying to get the companies"
+      });
+    });
+});
+
 app.post("/company/track", function(request, response) {
   let userID = request.body.userID;
   console.log("This is the request sent from the front end: ", request.body);

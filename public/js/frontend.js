@@ -59,6 +59,14 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   /////////////////////////////////////
   ////////// COMPANY FACTORY //////////
   /////////////////////////////////////
+  // View companies
+  service.viewCompanies = function() {
+    return $http({
+      method: "GET",
+      url: "/companies/view"
+    });
+  };
+
   // Track a company
   service.trackCompany = function(userID, companyInformation) {
     console.log("In the factory with: ", companyInformation);
@@ -154,8 +162,20 @@ app.controller("TrackCompanyController", function($state, $scope, AT_Factory) {
 
 });
 
-app.controller("CompaniesController", function($state) {
-  console.log("Hi from the CompaniesController");
+app.controller("CompaniesController", function($state, $scope, AT_Factory) {
+  $scope.trackCompany = function() {
+    console.log("Clicked the trackCompany button");
+    $state.go("track_company");
+  };
+
+  AT_Factory.viewCompanies()
+    .then(function(companies) {
+      $scope.companies = companies.data.companies;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+
 });
 
 
