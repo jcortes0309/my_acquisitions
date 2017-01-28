@@ -26,7 +26,7 @@
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
-            <span><i class="fa fa-bars fa-fw" aria-hidden="true"></i> Menu</span>
+            <span><i class="fa fa-bars fa-fw menu" aria-hidden="true"></i> Menu</span>
           </button>
           <a class="navbar-brand" ui-sref="home">Acquisitions Tracker </a>
         </div>
@@ -35,13 +35,13 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a ui-sref="dashboard" ng-show="logged_user">Dashboard</a>
+              <a ui-sref="dashboard" ng-show="logged_user">
+                <i class="fa fa-tachometer fa-fw" aria-hidden="true"></i> Dashboard
+              </a>
             </li>
             <li>
-              <a ui-sref="companies" ng-show="logged_user">Companies</a>
-            </li>
-            <li>
-              <a ui-sref="track_company" ng-show="logged_user">Track Company</a>
+              <a ui-sref="companies" ng-show="logged_user">
+                <i class="fa fa-building fa-fw" aria-hidden="true"></i> Companies</a>
             </li>
             <li>
               <a ui-sref="register" ng-hide="logged_user">Register</a>
@@ -49,11 +49,40 @@
             <li>
               <a ui-sref="login" ng-hide="logged_user">Login</a>
             </li>
-            <li>
-              <a ng-click="logout()" ng-show="logged_user" id="logout">
-                <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>
-                Logout
+            <li ng-show="logged_user" class="dropdown" ng-cloak>
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <span><i class="fa fa-plus fa-fw" aria-hidden="true"></i></span>
               </a>
+              <ul class="dropdown-menu" ng-cloak>
+                <li>
+                  <a ui-sref="track_company" ng-show="logged_user">
+                      <i class="fa fa-building fa-fw" aria-hidden="true"></i> Track Company</a>
+                </li>
+              </ul>
+            </li>
+            <li ng-show="logged_user" class="dropdown" ng-cloak>
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+              </a>
+              <ul class="dropdown-menu" ng-cloak>
+                <li>
+                  <a ui-sref="view_user({userID: logged_user._id})">
+                    <i class="fa fa-user fa-fw" aria-hidden="true"></i> View Profile
+                  </a>
+                </li>
+                <li>
+                  <a ui-sref="edit_user({userID: logged_user._id})">
+                    <i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i> Edit Profile
+                  </a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a ng-click="logout()" ng-show="logged_user" id="logout">
+                    <i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>
+                    Logout
+                  </a>
+                </li>
+              </ul>
             </li>
 
           </ul>

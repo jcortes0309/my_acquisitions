@@ -71,10 +71,15 @@ select {
   cursor: pointer;
 }
 
-/* Force fa-bars brand color to white */
+/* Force collapsed menu color to white */
 button.navbar-toggle span,
-i.fa-bars {
+i.menu {
   color: #FFF;
+}
+
+/* Force button border color to white */
+.navbar-inverse .navbar-toggle {
+  border-color: #FFF;
 }
 
 
