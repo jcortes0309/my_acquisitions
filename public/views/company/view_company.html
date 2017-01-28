@@ -48,7 +48,7 @@
                   <li ng-show="company.status" >
                     <div class="details">
                       <i class="fa fa-tag fa-fw"></i> status
-                      <span class="details-info">
+                      <span class="details-info capitalize">
                         {{ company.status }}
                       </span>
                     </div>
@@ -137,6 +137,9 @@
           <ul class="nav nav-pills">
             <li role="presentation" ui-sref="view_company.financial_performance" ui-sref-active="active">
               <a>Financial Performance</a>
+            </li>
+            <li role="presentation" ui-sref="view_company.notes" ui-sref-active="active">
+              <a>Notes</a>
             </li>
           </ul>
 

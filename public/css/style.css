@@ -19,7 +19,11 @@ select {
 }
 
 .table {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 
@@ -77,6 +81,10 @@ i.fa-bars {
 /*
  * Views Styles
  */
+.sidebar {
+  border-right: 1px solid darkgrey;
+}
+
 .padding-left {
   padding-left: 0;
 }
@@ -108,8 +116,8 @@ i.fa-bars {
   color: black;
 }
 
-.sidebar {
-  border-right: 1px solid darkgrey;
+.nested-view {
+  margin-top: 35px;
 }
 
 

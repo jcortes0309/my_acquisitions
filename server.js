@@ -260,7 +260,7 @@ app.post("/user/login", function(request, response) {
 ////////// View Companies //////////
 app.get("/companies/view", function(request, response) {
   console.log("In the backend trying to see the companies");
-  Company.find({})
+  Company.find({}).sort("name")
     .then(function(companies) {
       console.log("Here are the companies: ", companies);
       response.json({
@@ -331,6 +331,44 @@ app.get("/company/view/:companyID", function(request, response) {
       response.status(400);
       console.log("There was an error looking for that company: ", error.stack);
     });
+});
+
+////////// Edit company //////////
+app.post("/company/edit", function(request, response) {
+  let userID = request.body.userID;
+  let companyID = request.body.companyInformation._id;
+  let queryCompany = { _id: companyID };
+
+  console.log("This is the request sent from the front end: ", request.body);
+
+  return Company.findOneAndUpdate(queryCompany,
+    {
+      $set: {
+        name: request.body.companyInformation.name,
+        status: request.body.companyInformation.status,
+        website: request.body.companyInformation.website,
+        phone: request.body.companyInformation.phone,
+        address: request.body.companyInformation.address,
+        address2: request.body.companyInformation.address2,
+        city: request.body.companyInformation.city,
+        state: request.body.companyInformation.state,
+        zip_code: request.body.companyInformation.zip_code,
+        description: request.body.companyInformation.description,
+        updated_on: new Date(),
+        updated_by: userID
+      }
+    })
+      .then(function(updatedCompany) {
+        response.json({
+          status: 200,
+          message: "Company updated successfully"
+        });
+      })
+      .catch(function(error) {
+        response.status(400);
+        console.log("There was an error updating that company: ", error.stack);
+      });
+
 });
 
 

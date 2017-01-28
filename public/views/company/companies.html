@@ -23,8 +23,8 @@
   <div class="row">
     <div class="col-xs-12">
 
-      <div class="table-responsive spacer">
-        <table class="table table-striped table-hover">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover spacer">
           <thead>
             <tr>
               <th><a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">Name</a></th>
@@ -37,16 +37,29 @@
           </thead>
           <tbody>
             <tr ng-repeat="company in companies | filter: searchKeyword | orderBy:orderByField:reverseSort">
-              <td><a ui-sref="view_company({companyID: company._id})">{{ company.name }}</a></td>
-              <td>{{ company.status }}</td>
-              <td><a href="{{ company.website }}" target="_blank">{{ company.website }}</a></td>
+              <td>
+                <a ui-sref="view_company({companyID: company._id})">
+                  {{ company.name }}
+                </a>
+              </td>
+              <td class="capitalize">{{ company.status }}</td>
+              <td>
+                <a href="{{ company.website }}" target="_blank">
+                  {{ company.website }}
+                </a>
+              </td>
               <td>{{ company.phone }}</td>
               <td>{{ company.city }}</td>
               <td>
                 <span class="dropdown">
                 <span class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></span>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <li><a ui-sref="edit_company({companyID: company._id})">Edit</a></li>
+                  <li>
+                    <a ui-sref="view_company({companyID: company._id})">View</a>
+                  </li>
+                  <li>
+                    <a ui-sref="edit_company({companyID: company._id})">Edit</a>
+                  </li>
                 </ul>
                 </span>
               </td>

@@ -69,7 +69,7 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Track a company
   service.trackCompany = function(userID, companyInformation) {
-    console.log("In the factory with: ", companyInformation);
+    // console.log("In the factory with: ", companyInformation);
     return $http({
       method: "POST",
       url: "/company/track",
@@ -82,10 +82,23 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // View company
   service.viewCompany = function(companyID) {
-    console.log("companyID: ", companyID);
     return $http({
       method: "GET",
       url: "/company/view/" + companyID,
+    });
+  };
+
+
+  // Edit company
+  service.editCompany = function(userID, companyInformation) {
+    console.log("Company information in the factory: ", companyInformation);
+    return $http({
+      method: "POST",
+      url: "/company/edit",
+      data: {
+        userID: userID,
+        companyInformation: companyInformation
+      }
     });
   };
 
@@ -100,16 +113,19 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 /////////////////////////////////
 
 ////////// GENERAL CONTROLLERS //////////
+////////// Home //////////
 app.controller("HomeController", function($state) {
 
 });
 
+////////// Dashboard //////////
 app.controller("DashboardController", function($state) {
   console.log("Inside the DashboardController");
 });
 
 
 ////////// USER CONTROLLERS //////////
+////////// Register //////////
 app.controller("RegisterController", function($scope, $state, AT_Factory) {
   $scope.user = {};
 
@@ -132,6 +148,7 @@ app.controller("RegisterController", function($scope, $state, AT_Factory) {
   };
 });
 
+////////// Login //////////
 app.controller("LoginController", function($scope, $state, $cookies, $rootScope, AT_Factory) {
   $scope.user = {
     username: "",
@@ -153,8 +170,9 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
   };
 });
 
-////////// USER CONTROLLERS //////////
-app.controller("CompaniesController", function($scope, $state, AT_Factory) {
+////////// COMPANY CONTROLLERS //////////
+////////// View Companies //////////
+app.controller("ViewCompaniesController", function($scope, $state, AT_Factory) {
   $scope.trackCompany = function() {
     console.log("Clicked the trackCompany button");
     $state.go("track_company");
@@ -170,6 +188,7 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
 
 });
 
+////////// Track Company //////////
 app.controller("TrackCompanyController", function($scope, $state, AT_Factory) {
   $scope.trackCompany = function() {
   var company_information = $scope.company;
@@ -187,6 +206,7 @@ app.controller("TrackCompanyController", function($scope, $state, AT_Factory) {
 
 });
 
+////////// View Company //////////
 app.controller("ViewCompanyController", function($scope, $state, $stateParams, AT_Factory) {
   var companyID = $stateParams.companyID;
 
@@ -197,13 +217,44 @@ app.controller("ViewCompanyController", function($scope, $state, $stateParams, A
 
   AT_Factory.viewCompany(companyID)
     .then(function(company) {
-      console.log("The company is: ", company);
       $scope.company = company.data.company;
       $scope.companyOwner = company.data.companyOwner;
     })
     .catch(function(error) {
       console.log("There was an error!!!", error.stack);
     });
+
+});
+
+////////// Edit Company //////////
+app.controller("EditCompanyController", function($scope, $state, $stateParams, AT_Factory) {
+  // console.log("Using the EditCompanyController");
+  var companyID = $stateParams.companyID;
+
+  AT_Factory.viewCompany(companyID)
+    .then(function(company) {
+      $scope.company = company.data.company;
+      console.log($scope.company);
+      $scope.companyOwner = company.data.companyOwner;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+
+  $scope.editCompany = function() {
+    var company_information = $scope.company;
+    console.log("Company information: ", company_information);
+    var userID = $scope.logged_user._id;
+    AT_Factory.editCompany(userID, company_information)
+      .then(function(success) {
+        console.log("We were successful: ", success);
+        $state.go("companies");
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
 });
 
 
@@ -240,7 +291,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     name: "companies",
     url: "/Companies",
     templateUrl: "views/company/companies.html",
-    controller: "CompaniesController"
+    controller: "ViewCompaniesController"
   })
   .state({
     name: "track_company",
@@ -253,6 +304,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/Company/view/{companyID}",
     templateUrl: "views/company/view_company.html",
     controller: "ViewCompanyController"
+  })
+  .state({
+    name: "edit_company",
+    url: "/Company/edit/{companyID}",
+    templateUrl: "views/company/edit_company.html",
+    controller: "EditCompanyController"
   })
   ;
 
