@@ -19,11 +19,15 @@ select {
 }
 
 .table {
-  margin-bottom: 50px;
+  margin-bottom: 100px;
 }
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.removeButton {
+  cursor: pointer;
 }
 
 

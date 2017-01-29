@@ -371,6 +371,23 @@ app.post("/company/edit", function(request, response) {
 
 });
 
+app.post("/company/remove", function (request, response) {
+  let companyID = request.body.companyID;
+
+  return Company.findByIdAndRemove(companyID)
+    .then(function(companyRemoved) {
+      console.log("companyRemoved: ", companyRemoved);
+      response.json({
+        companyRemoved: companyRemoved
+      });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("There was an error updating that company: ", error.stack);
+    });
+
+});
+
 
 
 

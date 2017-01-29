@@ -102,6 +102,18 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
     });
   };
 
+  // Delete company
+  service.removeCompany = function(companyID) {
+    console.log("Company ID in the factory: ", companyID);
+    return $http({
+      method: "POST",
+      url: "/company/remove",
+      data: {
+        companyID: companyID
+      }
+    });
+  };
+
 
 
   return service;
@@ -173,18 +185,36 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
 ////////// COMPANY CONTROLLERS //////////
 ////////// View Companies //////////
 app.controller("ViewCompaniesController", function($scope, $state, AT_Factory) {
+  $scope.viewCompanies = function() {
+    AT_Factory.viewCompanies()
+      .then(function(companies) {
+        $scope.companies = companies.data.companies;
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
+  // Call viewCompanies after loading page
+  $scope.viewCompanies();
+
   $scope.trackCompany = function() {
     console.log("Clicked the trackCompany button");
     $state.go("track_company");
   };
 
-  AT_Factory.viewCompanies()
-    .then(function(companies) {
-      $scope.companies = companies.data.companies;
-    })
-    .catch(function(error) {
-      console.log("There was an error!!!", error.stack);
-    });
+  $scope.removeCompany = function(companyID) {
+    console.log("Clicked the remove button: ", companyID);
+    AT_Factory.removeCompany(companyID)
+      .then(function(companyRemoved) {
+        console.log("company removed: ", companyRemoved);
+        // Call viewCompanies after removing a company
+        $scope.viewCompanies();
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
 
 });
 
