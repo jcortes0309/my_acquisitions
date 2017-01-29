@@ -8,13 +8,15 @@
       <!-- Split button -->
       <div class="btn-group">
         <button ui-sref="edit_company({companyID: company._id})" class="btn btn-primary btn-sm" type="button" name="edit_btn">Edit</button>
-        <!-- <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu">
-          <li><a ui-sref="">Delete</a></li>
-        </ul> -->
+          <li>
+            <a ng-click="removeCompany(company._id)" class="pointerCursor remove">Remove</a>
+          </li>
+        </ul>
       </div>
 
       <hr>

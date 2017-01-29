@@ -26,8 +26,23 @@ select {
   text-transform: capitalize;
 }
 
-.removeButton {
+/* Change cursor to a pointer when needed */
+.pointerCursor {
   cursor: pointer;
+}
+
+li a.remove {
+  background-color: red;
+  color: white;
+}
+
+li a.remove:hover {
+  background-color: #C60303;
+  color: white;
+}
+
+ul.dropdown-menu .divider {
+  margin: 4px 0;
 }
 
 
@@ -68,11 +83,6 @@ select {
  /* Force navbar brand color to white */
 .navbar-header .navbar-brand {
   color: #FFF
-}
-
-/* Change cursor to a pointer when hovering over the logout button */
-#logout {
-  cursor: pointer;
 }
 
 /* Force collapsed menu color to white */
@@ -128,6 +138,14 @@ i.menu {
 .nested-view {
   margin-top: 35px;
 }
+
+
+/*
+ * ngDialog Styles
+ */
+/*.ngdialog.ngdialog-theme-plain.custom-width .ngdialog-content {
+   width: 350px;
+}*/
 
 
 /*

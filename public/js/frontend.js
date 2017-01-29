@@ -1,7 +1,7 @@
-var app = angular.module("acquisitions_tracker", ["ui.router", "ngCookies", "angularMoment"]);
+var app = angular.module("acquisitions_tracker", ["ui.router", "ngCookies", "angularMoment", "ngDialog"]);
 
 
-app.run(function($rootScope, $state, $cookies) {
+app.run(function($rootScope, $state, $cookies, ngDialog) {
   $rootScope.factory_at_cd = $cookies.getObject("at_cd");
   // console.log("This is the factory cookie: ", $rootScope.factory_at_cd);
 
@@ -21,6 +21,17 @@ app.run(function($rootScope, $state, $cookies) {
     $rootScope.logged_user = null;
     $state.go("home");
   };
+
+  $rootScope.openModal = function () {
+    ngDialog.open({
+      template: "views/company/track_company_small.html",
+      controller: "TrackCompanyController",
+      className: "ngdialog-theme-default",
+      closeByEscape: true,
+      width: 650
+    });
+  };
+
 });
 
 
@@ -126,12 +137,12 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
 ////////// GENERAL CONTROLLERS //////////
 ////////// Home //////////
-app.controller("HomeController", function($state) {
+app.controller("HomeController", function($scope) {
 
 });
 
 ////////// Dashboard //////////
-app.controller("DashboardController", function($state) {
+app.controller("DashboardController", function($scope) {
   console.log("Inside the DashboardController");
 });
 
@@ -219,10 +230,15 @@ app.controller("ViewCompaniesController", function($scope, $state, AT_Factory) {
 });
 
 ////////// Track Company //////////
-app.controller("TrackCompanyController", function($scope, $state, AT_Factory) {
+app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ngDialog) {
+  // Close modal dialog if open
+  ngDialog.close();
+
   $scope.trackCompany = function() {
   var company_information = $scope.company;
-  console.log("Company information: ", company_information);
+  // Close modal dialog before continuing
+  ngDialog.close();
+  // console.log("Company information: ", company_information);
   var userID = $scope.logged_user._id;
   AT_Factory.trackCompany(userID, company_information)
     .then(function(success) {
@@ -254,6 +270,19 @@ app.controller("ViewCompanyController", function($scope, $state, $stateParams, A
       console.log("There was an error!!!", error.stack);
     });
 
+  $scope.removeCompany = function(companyID) {
+    console.log("Clicked the remove button: ", companyID);
+    AT_Factory.removeCompany(companyID)
+      .then(function(companyRemoved) {
+        console.log("company removed: ", companyRemoved);
+        // Call viewCompanies after removing a company
+        $state.go("companies");
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
 });
 
 ////////// Edit Company //////////
@@ -278,7 +307,7 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
     AT_Factory.editCompany(userID, company_information)
       .then(function(success) {
         console.log("We were successful: ", success);
-        $state.go("companies");
+        $state.go("view_company", {companyID: company_information._id});
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);

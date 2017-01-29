@@ -118,7 +118,9 @@ const Company = mongoose.model("Company", {
     required: true
   },
   status: {
-    type: String
+    type: String,
+    required: true,
+    default: "identified"
   },
   website: {
     type: String

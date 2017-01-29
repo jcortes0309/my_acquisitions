@@ -28,6 +28,7 @@
                 <option value="pending_approval">Pending approval</option>
                 <option value="approved">Approved</option>
                 <option value="declined">Declined</option>
+                <option value="declined">Archived</option>
               </select>
             </div>
           </div>
@@ -148,7 +149,7 @@
             </div>
 
             <div class="col-sm-5">
-              <button ui-sref="companies" class="btn btn-default btn-sm btn-block" type="button" name="button">Cancel</button>
+              <button ui-sref="view_company({companyID: company._id})" class="btn btn-default btn-sm btn-block" type="button" name="button">Cancel</button>
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-10 col-sm-offset-1">
+    <div class="col-xs-10 col-xs-offset-1">
       <h4><a ui-sref="companies">Companies </a><small><strong>&gt;&gt; track</strong></small></h4>
       <hr>
     </div>
@@ -16,7 +16,7 @@
           <div class="form-group">
             <div class="col-sm-5 col-sm-offset-1">
               <label for="name" class="control-label">Name</label>
-              <input ng-model="company.name" type="text" class="form-control" id="name" name="name" value="" title="Please enter the name" placeholder="Name" required="">
+              <input ng-model="company.name" type="text" class="form-control" id="name" name="name" value="" title="Please enter the company name" placeholder="Company Name" required="">
             </div>
 
             <div class="col-sm-5">
@@ -28,6 +28,7 @@
                 <option value="pending_approval">Pending approval</option>
                 <option value="approved">Approved</option>
                 <option value="declined">Declined</option>
+                <option value="declined">Archived</option>
               </select>
             </div>
           </div>
