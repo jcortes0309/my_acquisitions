@@ -368,8 +368,10 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 
   $scope.viewContacts = function() {
     AT_Factory.viewContacts()
-      .then(function(contacts) {
-        $scope.contacts = contacts.data.contacts;
+      .then(function(contactsInformation) {
+        console.log("contactsInformation: ", contactsInformation);
+        $scope.contacts = contactsInformation.data.contacts;
+        $scope.companies = contactsInformation.data.companies;
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);
@@ -419,7 +421,6 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
   var companyID = $stateParams.companyID;
 
-  // var companyID = $rootScope.rootScopeCompanyID;
   console.log("companyID is: ", companyID);
 
   $scope.viewCompanyContacts = function() {
@@ -437,7 +438,7 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
   $scope.viewCompanyContacts();
 
   // Open modal panel to create contact
-  $scope.openCreateContact = function (companyID) {
+  $scope.openCreateContact = function () {
     // Create rootScope variable to pass information to another controller
     $rootScope.rootScopeCompanyID = companyID;
 
@@ -446,6 +447,7 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
       controller: "CreateContactController",
       className: "ngdialog-theme-default",
       closeByEscape: true,
+      showClose: true,
       width: 850
     });
   };

@@ -30,6 +30,7 @@
               <th><a href="" ng-click="orderByField='name'; reverseSort = !reverseSort">Name</a></th>
               <th><a href="" ng-click="orderByField='email'; reverseSort = !reverseSort">Email</a></th>
               <th><a href="" ng-click="orderByField='phone'; reverseSort = !reverseSort">Phone</a></th>
+              <th><a href="" ng-click="orderByField='company'; reverseSort = !reverseSort">Company</a></th>
               <th></th>
             </tr>
           </thead>
@@ -42,6 +43,7 @@
               </td>
               <td>{{ contact.email }}</td>
               <td>{{ contact.phone }}</td>
+              <td>{{ contact.company }}</td>
               <td>
                 <span class="dropdown">
                 <span class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></span>

@@ -448,10 +448,25 @@ app.get("/contacts/view", function(request, response) {
 
   Contact.find({}).sort("first_name")
     .then(function(contacts) {
-      console.log("Here are the contacts: ", contacts);
-      response.json({
-        contacts: contacts
+      // console.log("\n\nContacts: ", contacts);
+      // Extract the IDs for all companies
+      var companyIDs = contacts.map(function(contact) {
+        return contact.company;
       });
+      console.log("\n\ncompany IDs are: ", companyIDs);
+
+      return Company.find({
+        _id: {
+          $in: companyIDs
+        }
+      })
+        .then(function(companies) {
+          console.log("Here are the contacts: ", contacts);
+          response.json({
+            contacts: contacts,
+            companies: companies
+          });
+        });
     })
     .catch(function(error) {
       response.status(500) ;
