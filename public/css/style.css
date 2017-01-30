@@ -161,3 +161,36 @@ footer {
  	margin-top: 30px;
  	border-top: 5px solid #04519B;
 }
+
+
+/*
+ * Media Queries
+ */
+
+ /* Medium Devices, Desktops */
+@media only screen and (max-width : 992px) {
+  #search {
+    padding: 20px 0 10px 0;
+  }
+}
+
+ /* Small Devices, Tablets */
+ @media only screen and (max-width : 767px) {
+  .user-name {
+    margin-top: 10px;
+    font-size: 30px;
+  }
+
+  .col-xs-12 {
+    padding-left: 15px;
+  }
+
+  .sidebar {
+    border-right: none;
+  }
+
+  .chips {
+    display: block;
+    margin-bottom: 10px;
+  }
+ }

@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
-      <h4><a ui-sref="companies">Contacts </a><small><strong>&gt;&gt; create</strong></small></h4>
-      <hr>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="col-xs-10 col-xs-offset-1">
+      <h3 class="text-center">New Contact</h3>
 
       <form class="form-horizontal" ng-submit="createContact()">
         <fieldset>
+
           <div class="form-group">
             <div class="col-sm-5 col-sm-offset-1">
               <label for="first_name" class="control-label">First Name</label>
-              <input ng-model="contact.first_name" type="text" class="form-control" id="first_name" name="first_name" value="" title="Please enter the contact's first name" placeholder="First Name" required="">
+              <input ng-model="contact.first_name" type="text" class="form-control" id="first_name" name="first_name" value="" title="Please enter the contact's contact's first name" placeholder="First Name" required="">
             </div>
 
             <div class="col-sm-5">
               <label for="last_name" class="control-label">Last Name</label>
-              <input ng-model="contact.last_name" type="text" class="form-control" id="last_name" name="last_name" value="" title="Please enter the contact's last name" placeholder="Last Name" required="">
+              <input ng-model="contact.last_name" type="text" class="form-control" id="last_name" name="last_name" value="" title="Please enter the contact's contact's last name" placeholder="Last Name" required="">
             </div>
           </div>
 
           <div class="form-group">
             <div class="col-sm-5 col-sm-offset-1">
               <label for="email" class="control-label">Email</label>
-              <input ng-model="contact.email" type="email" class="form-control" id="email" name="email" value="" title="Please enter the contact's email address" placeholder="john.doe@example.com">
+              <input ng-model="contact.email" type="email" class="form-control" id="email" name="email" value="" title="Please enter the contact's contact's email address" placeholder="john.doe@example.com">
             </div>
 
             <div class="col-sm-5">
               <label for="phone" class="control-label">Phone</label>
-              <input ng-model="contact.phone" type="text" class="form-control" id="phone" name="phone" value="" title="Please enter the phone number" placeholder="Phone">
+              <input ng-model="contact.phone" type="text" class="form-control" id="phone" name="phone" value="" title="Please enter the contact's phone number" placeholder="Phone">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-5 col-sm-offset-1">
+              <label for="title" class="control-label">Title</label>
+              <input ng-model="contact.title" type="text" class="form-control" id="title" name="title" value="" title="Please enter the contact's title" placeholder="Title">
+            </div>
+
+            <div class="col-sm-5">
+              <label for="type" class="control-label">Type</label>
+              <select ng-model="contact.type" name="type" class="form-control" id="type" required="">
+                <option disabled selected value> -- select an option -- </option>
+                <option value="none">-- None --</option>
+                <option value="decision_maker">Decision Maker</option>
+                <option value="evaluator">Evaluator</option>
+                <option value="influencer">Influencer</option>
+              </select>
             </div>
           </div>
 
@@ -50,7 +64,7 @@
             </div>
 
             <div class="col-sm-5">
-              <button ui-sref="companies" class="btn btn-default btn-sm btn-block" type="button" name="button">Cancel</button>
+              <button ui-sref="companies" class="btn btn-danger btn-sm btn-block" type="button" name="button">Cancel</button>
             </div>
           </div>
 
@@ -59,5 +73,8 @@
       </form>
 
     </div>
+    <!-- /.col-xs-10 -->
   </div>
+  <!-- /.row -->
 </div>
+<!-- /.container-fluid -->

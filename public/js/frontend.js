@@ -22,7 +22,8 @@ app.run(function($rootScope, $state, $cookies, ngDialog) {
     $state.go("home");
   };
 
-  $rootScope.openModal = function () {
+  // Open modal panel to track company (from menu bar)
+  $rootScope.openTrackCompanySmall = function () {
     ngDialog.open({
       template: "views/company/track_company_small.html",
       controller: "TrackCompanyController",
@@ -67,6 +68,7 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   };
 
 
+
   /////////////////////////////////////
   ////////// COMPANY FACTORY //////////
   /////////////////////////////////////
@@ -95,7 +97,7 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   service.viewCompany = function(companyID) {
     return $http({
       method: "GET",
-      url: "/company/view/" + companyID,
+      url: "/company/view/" + companyID
     });
   };
 
@@ -126,25 +128,35 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   };
 
 
+
   /////////////////////////////////////
-  ////////// COMPANY FACTORY //////////
+  ////////// CONTACT FACTORY //////////
   /////////////////////////////////////
   // View contacts
-  service.viewContacts = function functionName() {
+  service.viewContacts = function() {
     return $http({
       method: "GET",
       url: "/contacts/view"
     });
   };
 
+  // View company contacts
+  service.viewCompanyContacts = function(companyID) {
+    return $http({
+      method: "GET",
+      url: "/company/contacts/view/" + companyID
+    });
+  };
+
   // Create contact
-  service.createContact = function(userID, contactInformation) {
+  service.createContact = function(userID, companyID, contactInformation) {
     console.log("In the factory with: ", contactInformation);
     return $http({
       method: "POST",
       url: "/contact/create",
       data: {
         userID: userID,
+        companyID: companyID,
         contactInformation: contactInformation
       }
     });
@@ -156,6 +168,8 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   return service;
 
 });
+
+
 
 /////////////////////////////////
 ////////// CONTROLLERS //////////
@@ -258,6 +272,9 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
 
 ////////// Track Company //////////
 app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ngDialog) {
+  var companyID = $stateParams.companyID;
+  console.log("companyID: ", companyID);
+
   // Close modal dialog if open
   ngDialog.close();
 
@@ -286,7 +303,7 @@ app.controller("ViewCompanyController", function($scope, $state, $stateParams, A
   // Scroll to top when loading page (need this when coming from a contact)
   document.body.scrollTop = document.documentElement.scrollTop = 0;
 
-  // $state.go("view_company.financial_performance");
+  $state.go("view_company.contacts");
 
   AT_Factory.viewCompany(companyID)
     .then(function(company) {
@@ -346,8 +363,9 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
 
 ////////// CONTACT CONTROLLERS //////////
 ////////// View Contacts //////////
-app.controller("ContactsController", function($scope, $state, AT_Factory) {
+app.controller("ContactsController", function($scope, $state, $rootScope, AT_Factory, ngDialog) {
   console.log("Using the ContactsController");
+
   $scope.viewContacts = function() {
     AT_Factory.viewContacts()
       .then(function(contacts) {
@@ -360,19 +378,100 @@ app.controller("ContactsController", function($scope, $state, AT_Factory) {
 
   // Call viewContacts after loading page
   $scope.viewContacts();
+
+  // // Open modal panel to create contact
+  // $scope.openCreateContact = function (companyID) {
+  //   // Create rootScope variable to pass information to another controller
+  //   $rootScope.rootScopeCompanyID = companyID;
+  //
+  //   ngDialog.open({
+  //     template: "views/contact/create_contact.html",
+  //     controller: "ContactsController",
+  //     className: "ngdialog-theme-default",
+  //     closeByEscape: true,
+  //     width: 850
+  //   });
+  // };
+
+  $scope.createContact = function() {
+  var userID = $scope.logged_user._id;
+  var companyID = $rootScope.rootScopeCompanyID;
+  var contact_information = $scope.contact;
+
+  AT_Factory.createContact(userID, companyID, contact_information)
+    .then(function(success) {
+      console.log("We were successful: ", success);
+      // Call viewContacts after adding contact
+      $scope.viewContacts();
+      // Clear rootScope variable used to pass information to this controller
+      $rootScope.rootScopeCompanyID = null;
+      // Close modal dialog if open
+      ngDialog.close();
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+  };
+
+});
+
+////////// View Company Contacts //////////
+app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+  var companyID = $stateParams.companyID;
+
+  // var companyID = $rootScope.rootScopeCompanyID;
+  console.log("companyID is: ", companyID);
+
+  $scope.viewCompanyContacts = function() {
+    AT_Factory.viewCompanyContacts(companyID)
+      .then(function(contacts) {
+        $scope.contacts = contacts.data.contacts;
+        console.log("contacts: ", $scope.contacts);
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
+  // Call viewCompanyContacts after loading page
+  $scope.viewCompanyContacts();
+
+  // Open modal panel to create contact
+  $scope.openCreateContact = function (companyID) {
+    // Create rootScope variable to pass information to another controller
+    $rootScope.rootScopeCompanyID = companyID;
+
+    ngDialog.open({
+      template: "views/contact/create_contact.html",
+      controller: "CreateContactController",
+      className: "ngdialog-theme-default",
+      closeByEscape: true,
+      width: 850
+    });
+  };
+
 });
 
 ////////// Create Contact //////////
-app.controller("CreateContactController", function($scope, $state, AT_Factory) {
-
+app.controller("CreateContactController", function($scope, $state, $rootScope, AT_Factory, ngDialog) {
   $scope.createContact = function() {
+  var userID = $scope.logged_user._id;
+  var companyID = $rootScope.rootScopeCompanyID;
   var contact_information = $scope.contact;
 
-  console.log("Contact information: ", contact_information);
-  var userID = $scope.logged_user._id;
-  AT_Factory.createContact(userID, contact_information)
+  console.log("The company ID is: ", companyID);
+
+  AT_Factory.createContact(userID, companyID, contact_information)
     .then(function(success) {
       console.log("We were successful: ", success);
+      // Clear rootScope variable used to pass information to this controller
+      $rootScope.rootScopeCompanyID = null;
+      // Close modal dialog if open
+      ngDialog.close();
+
+      // Reload view to show the new contacts
+      $state.reload();
+
     })
     .catch(function(error) {
       console.log("There was an error!!!", error.stack);
@@ -429,6 +528,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/Company/view/{companyID}",
     templateUrl: "views/company/view_company.html",
     controller: "ViewCompanyController"
+  })
+  .state({
+    name: "view_company.contacts",
+    url: "/contacts",
+    templateUrl: "views/contact/company_contacts.html",
+    controller: "ViewCompanyContacts"
   })
   .state({
     name: "edit_company",

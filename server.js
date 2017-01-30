@@ -190,12 +190,18 @@ const Contact = mongoose.model("Contact", {
   phone: {
     type: String
   },
+  title: {
+    type: String
+  },
+  type: {
+    type: String
+  },
   description: {
     type: String
   },
-  account: [{
+  company: {
     type: mongoose.Schema.Types.ObjectId
-  }],
+  },
   ownerID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
@@ -455,9 +461,47 @@ app.get("/contacts/view", function(request, response) {
     });
 });
 
+////////// View company contacts //////////
+app.get("/company/contacts/view/:companyID", function(request, response) {
+  let companyID = request.params.companyID;
+  console.log("\n\n\ncompanyID: ", companyID);
+  console.log("\n\n\n");
+
+  Contact.find({
+    company: companyID
+  })
+    .then(function(contacts) {
+      console.log("These are the contacts: ", contacts);
+      response.json({
+        contacts: contacts
+      });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("There was an error looking for that company: ", error.stack);
+    });
+
+  // return Company.findById(companyID)
+  //   .then(function(company) {
+  //     return User.findById(company.created_by)
+  //       .then(function(user) {
+  //         console.log("This is the user: ", user);
+  //         response.json({
+  //           company: company,
+  //           companyOwner: user
+  //         });
+  //       });
+  //   })
+  //   .catch(function(error) {
+  //     response.status(400);
+  //     console.log("There was an error looking for that company: ", error.stack);
+  //   });
+});
+
 ////////// Create contact //////////
 app.post("/contact/create", function(request, response) {
   let userID = request.body.userID;
+  let companyID = request.body.companyID;
   console.log("This is the request sent from the front end: ", request.body);
 
   let newContact = new Contact({
@@ -465,7 +509,10 @@ app.post("/contact/create", function(request, response) {
     last_name: request.body.contactInformation.last_name,
     email: request.body.contactInformation.email,
     phone: request.body.contactInformation.phone,
+    title: request.body.contactInformation.title,
+    type: request.body.contactInformation.type,
     description: request.body.contactInformation.description,
+    company: companyID,
     ownerID: userID,
     created_on: new Date(),
     created_by: userID
