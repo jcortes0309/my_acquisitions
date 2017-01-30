@@ -112,6 +112,7 @@ const User = mongoose.model("User", {
   }
 });
 
+///////// COMPANY MODEL /////////
 const Company = mongoose.model("Company", {
   name: {
     type: String,
@@ -159,6 +160,48 @@ const Company = mongoose.model("Company", {
   created_on: {
     type: Date,
     default: Date.now,
+    required: true
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  updated_on: {
+    type: Date,
+    default: Date.now
+  },
+  updated_by: {
+    type: mongoose.Schema.Types.ObjectId
+  }
+});
+
+///////// CONTACT MODEL /////////
+const Contact = mongoose.model("Contact", {
+  first_name: {
+    type: String,
+    required: true
+  },
+  last_name: {
+    type: String
+  },
+  email: {
+    type: String
+  },
+  phone: {
+    type: String
+  },
+  description: {
+    type: String
+  },
+  account: [{
+    type: mongoose.Schema.Types.ObjectId
+  }],
+  ownerID: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  created_on: {
+    type: Date,
     required: true
   },
   created_by: {
@@ -373,6 +416,7 @@ app.post("/company/edit", function(request, response) {
 
 });
 
+////////// Remove company //////////
 app.post("/company/remove", function (request, response) {
   let companyID = request.body.companyID;
 
@@ -391,7 +435,57 @@ app.post("/company/remove", function (request, response) {
 });
 
 
+////////// CONTACT //////////
+////////// View Contacts //////////
+app.get("/contacts/view", function(request, response) {
+  console.log("In the backend trying to see the contacts");
 
+  Contact.find({}).sort("first_name")
+    .then(function(contacts) {
+      console.log("Here are the contacts: ", contacts);
+      response.json({
+        contacts: contacts
+      });
+    })
+    .catch(function(error) {
+      response.status(500) ;
+      response.json({
+        message: "Error trying to get the contacts"
+      });
+    });
+});
+
+////////// Create contact //////////
+app.post("/contact/create", function(request, response) {
+  let userID = request.body.userID;
+  console.log("This is the request sent from the front end: ", request.body);
+
+  let newContact = new Contact({
+    first_name: request.body.contactInformation.first_name,
+    last_name: request.body.contactInformation.last_name,
+    email: request.body.contactInformation.email,
+    phone: request.body.contactInformation.phone,
+    description: request.body.contactInformation.description,
+    ownerID: userID,
+    created_on: new Date(),
+    created_by: userID
+  });
+
+  newContact.save()
+    .then(function(result) {
+      console.log("Contact created successfully: ", result);
+      response.json({
+        status: 200,
+        message: "Contact created successfully"
+      });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("\n\n\n");
+      console.log("Didn't create Contact because: ", error);
+    });
+
+});
 
 
 

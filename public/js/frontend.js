@@ -126,6 +126,32 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   };
 
 
+  /////////////////////////////////////
+  ////////// COMPANY FACTORY //////////
+  /////////////////////////////////////
+  // View contacts
+  service.viewContacts = function functionName() {
+    return $http({
+      method: "GET",
+      url: "/contacts/view"
+    });
+  };
+
+  // Create contact
+  service.createContact = function(userID, contactInformation) {
+    console.log("In the factory with: ", contactInformation);
+    return $http({
+      method: "POST",
+      url: "/contact/create",
+      data: {
+        userID: userID,
+        contactInformation: contactInformation
+      }
+    });
+  };
+
+
+
 
   return service;
 
@@ -193,9 +219,10 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
   };
 });
 
+
 ////////// COMPANY CONTROLLERS //////////
 ////////// View Companies //////////
-app.controller("ViewCompaniesController", function($scope, $state, AT_Factory) {
+app.controller("CompaniesController", function($scope, $state, AT_Factory) {
   $scope.viewCompanies = function() {
     AT_Factory.viewCompanies()
       .then(function(companies) {
@@ -317,6 +344,45 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
 });
 
 
+////////// CONTACT CONTROLLERS //////////
+////////// View Contacts //////////
+app.controller("ContactsController", function($scope, $state, AT_Factory) {
+  console.log("Using the ContactsController");
+  $scope.viewContacts = function() {
+    AT_Factory.viewContacts()
+      .then(function(contacts) {
+        $scope.contacts = contacts.data.contacts;
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
+  // Call viewContacts after loading page
+  $scope.viewContacts();
+});
+
+////////// Create Contact //////////
+app.controller("CreateContactController", function($scope, $state, AT_Factory) {
+
+  $scope.createContact = function() {
+  var contact_information = $scope.contact;
+
+  console.log("Contact information: ", contact_information);
+  var userID = $scope.logged_user._id;
+  AT_Factory.createContact(userID, contact_information)
+    .then(function(success) {
+      console.log("We were successful: ", success);
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+  };
+
+});
+
+
+
 ////////////////////////////
 ////////// ROUTES //////////
 ////////////////////////////
@@ -350,7 +416,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     name: "companies",
     url: "/Companies",
     templateUrl: "views/company/companies.html",
-    controller: "ViewCompaniesController"
+    controller: "CompaniesController"
   })
   .state({
     name: "track_company",
@@ -369,6 +435,18 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/Company/edit/{companyID}",
     templateUrl: "views/company/edit_company.html",
     controller: "EditCompanyController"
+  })
+  .state({
+    name: "contacts",
+    url: "/Contacts",
+    templateUrl: "views/contact/contacts.html",
+    controller: "ContactsController"
+  })
+  .state({
+    name: "create_contact",
+    url: "/Contact/create",
+    templateUrl: "views/contact/create_contact.html",
+    controller: "CreateContactController"
   })
   ;
 

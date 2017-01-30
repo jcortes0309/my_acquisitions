@@ -50,6 +50,14 @@
                 <i class="fa fa-building fa-fw" aria-hidden="true"></i> Companies</a>
             </li>
             <li>
+              <a ui-sref="contacts" ng-show="logged_user">
+                <i class="fa fa-users fa-fw" aria-hidden="true"></i> Contacts</a>
+            </li>
+            <li>
+              <a ui-sref="create_contact" ng-show="logged_user">
+                <i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> Create Contact</a>
+            </li>
+            <li>
               <a ui-sref="register" ng-hide="logged_user">Register</a>
             </li>
             <li>
