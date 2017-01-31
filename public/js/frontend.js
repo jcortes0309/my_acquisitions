@@ -1,3 +1,16 @@
+// Use jQuery to add active class to menu items
+$(".nav a").on("click", function(){
+   $(".nav").find(".active").removeClass("active");
+   $(this).parent().addClass("active");
+});
+
+// Use jQuery to close dropdown menu after clicking on menu item
+$(document).on('click','.navbar-collapse.in',function(e) {
+  if( $(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle' ) {
+    $(this).collapse('hide');
+  }
+});
+
 var app = angular.module("acquisitions_tracker", ["ui.router", "ngCookies", "angularMoment", "ngDialog"]);
 
 
@@ -70,6 +83,14 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
   /////////////////////////////////////
   ////////// COMPANY FACTORY //////////
   /////////////////////////////////////
+  // Get number of companies in database
+  service.countCompanies = function() {
+    return $http({
+      method: "GET",
+      url: "/companies/count"
+    });
+  };
+
   // View companies
   service.viewCompanies = function() {
     return $http({
@@ -229,8 +250,26 @@ app.controller("HomeController", function($scope) {
 });
 
 ////////// Dashboard //////////
-app.controller("DashboardController", function($scope) {
-  console.log("Inside the DashboardController");
+app.controller("DashboardController", function($scope, AT_Factory) {
+  AT_Factory.countCompanies()
+    .then(function(totals) {
+      console.log("total companies: ", totals);
+      $scope.totalCompanies = totals.data.totalCompanies;
+      $scope.totalContacts = totals.data.totalContacts;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+
+  // AT_Factory.countContacts()
+  //   .then(function(totalContacts) {
+  //     console.log("total contacts: ", totalContacts);
+  //     $scope.totalContacts = totalContacts.data.totalContacts;
+  //   })
+  //   .catch(function(error) {
+  //     console.log("There was an error!!!", error.stack);
+  //   });
+
 });
 
 
@@ -272,7 +311,7 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
         $cookies.putObject("at_cd", logged_user);
         $rootScope.at_cd = logged_user;
         $rootScope.logged_user = $rootScope.at_cd.data.user;
-        $state.go("dashboard");
+        $state.go("home");
       })
       .catch(function(error) {
         console.log("There was an error!!!", error);
@@ -552,30 +591,6 @@ app.controller("viewCompanyFinancialsController", function($scope, $state, $root
       // });
   };
 
-
-  // AT_Factory.viewOneContact(contactID)
-  //   .then(function(contact) {
-  //     $scope.contact = contact.data.contact;
-  //     $scope.contactOwner = contact.data.contactOwner;
-  //   })
-  //   .catch(function(error) {
-  //     console.log("There was an error!!!", error.stack);
-  //   });
-  //
-  // $scope.editContact = function() {
-  //   var contact_information = $scope.contact;
-  //   // console.log("Contact information: ", contact_information);
-  //   var userID = $scope.logged_user._id;
-  //   AT_Factory.editContact(userID, contact_information)
-  //     .then(function(success) {
-  //       // console.log("We were successful: ", success);
-  //       $state.go("view_company", {companyID: contact_information.company});
-  //     })
-  //     .catch(function(error) {
-  //       console.log("There was an error!!!", error.stack);
-  //     });
-  // };
-
 });
 
 ////////// Create Contact //////////
@@ -644,15 +659,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
   .state({
     name: "home",
     url: "/",
-    templateUrl: "views/general/home.html",
-    controller: "HomeController"
-  })
-  .state({
-    name: "dashboard",
-    url: "/dashboard",
     templateUrl: "views/general/dashboard.html",
     controller: "DashboardController"
   })
+  // .state({
+  //   name: "dashboard",
+  //   url: "/dashboard",
+  //   templateUrl: "views/general/dashboard.html",
+  //   controller: "DashboardController"
+  // })
   .state({
     name: "register",
     url: "/User/register",
@@ -721,5 +736,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
   })
   ;
 
-  $urlRouterProvider.otherwise("/companies");
+  $urlRouterProvider.otherwise("/");
 });

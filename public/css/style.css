@@ -200,8 +200,13 @@ footer {
     border-right: none;
   }
 
-  .chips {
-    display: block;
-    margin-bottom: 10px;
+  .bootcards-summary-item
+  {
+    padding: 25px 10px;
   }
+
+  .bootcards-summary-item h4 {
+    font-size: 16px;
+  }
+
  }

@@ -1,40 +1,37 @@
 <!DOCTYPE html>
 
 <div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
 
-  <form class="form-horizontal" ng-submit="trackTargetCompany()">
-    <fieldset>
-
-      <div class="form-group">
-        <label for="company_name" class="col-sm-3 control-label">Company Name</label>
-        <div class="col-sm-7">
-          <input ng-model="tracker.company_name" name="company_name" type="text" class="form-control" id="company_name" title="Please add a company name"  placeholder="Company Name" required="">
+      <div class="panel panel-default bootcards-summary">
+        <div class="panel-heading">
+          <h3 class="text-center">Dashboard</h3>
         </div>
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-6 col-sm-4 col-sm-offset-1 col-md-3 col-md-offset-2">
+              <a ui-sref="companies" class="bootcards-summary-item">
+                <i class="fa fa-3x fa-building-o"></i>
+                <h4>Companies <span class="label label-info">{{ totalCompanies }}</span></h4>
+              </a>
+            </div>
+            <div class="col-xs-6 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-2">
+              <a ui-sref="contacts" class="bootcards-summary-item">
+                <i class="fa fa-3x fa-users"></i>
+                <h4>Contacts <span class="label label-info">{{ totalContacts }}</span></h4>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
+      <!-- /.bootcards-summary -->
 
-      <div class="form-group">
-        <label for="" class="col-sm-3 text-right">Company Description</label>
-        <div class="col-sm-7">
-          <textarea ng-model="tracker.company_description" ng-trim="true" class="form-control" id="company_description" name="company_description" value="" title="Please add a company description" placeholder="Company Description" rows="2" required=""></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-sm-4 col-sm-offset-3 spacer">
-          <button class="btn btn-success btn-sm btn-block" type="submit" name="button">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            Track Company
-          </button>
-        </div>
-        <div class="col-sm-3">
-          <button class="btn btn-primary btn-sm btn-block" ui-sref="track_company" name="button">
-            <i class="fa fa-list-alt fa-fw" aria-hidden="true"></i>
-            Full Form
-          </button>
-        </div>
-      </div>
-
-    </fieldset>
-  </form>
-
+    </div>
+    <!-- /.col-xs-10 -->
+  </div>
+  <!-- /.row -->
 </div>
+<!-- /.container-fluid -->

@@ -332,6 +332,29 @@ app.post("/user/login", function(request, response) {
 
 ////////// COMPANY //////////
 ////////// View Companies //////////
+app.get("/companies/count", function(request, response) {
+  console.log("Trying to count my companies");
+  Company.count({})
+    .then(function(totalCompanies) {
+      Contact.count({})
+        .then(function(totalContacts) {
+          console.log("We have companies: ", totalCompanies);
+          console.log("We have contacts: ", totalContacts);
+          response.json({
+            totalCompanies: totalCompanies,
+            totalContacts: totalContacts
+          });
+        });
+    })
+    .catch(function(error) {
+      response.status(500) ;
+      response.json({
+        message: "Error trying to get the companies"
+      });
+    });
+});
+
+////////// View Companies //////////
 app.get("/companies/view", function(request, response) {
   console.log("In the backend trying to see the companies");
   Company.find({}).sort("name")
