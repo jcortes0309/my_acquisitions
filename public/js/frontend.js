@@ -98,7 +98,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
     });
   };
 
-
   // Edit company
   service.editCompany = function(userID, companyInformation) {
     return $http({
@@ -118,6 +117,29 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
       url: "/company/remove",
       data: {
         companyID: companyID
+      }
+    });
+  };
+
+  // View company financials
+  service.viewCompanyFinancials = function(companyID) {
+    console.log("In the factory with: ", companyID);
+    return $http({
+      method: "GET",
+      url: "/company/view/" + companyID
+    });
+  };
+
+  // Edit company financials
+  service.editCompanyFinancials = function(userID, companyID, company_information) {
+    console.log("Factory companyID: ", company_information);
+    return $http({
+      method: "POST",
+      url: "/company/financials/edit",
+      data: {
+        userID: userID,
+        companyID: companyID,
+        companyInformation: company_information
       }
     });
   };
@@ -424,7 +446,7 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 });
 
 ////////// View Company Contacts //////////
-app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+app.controller("ViewCompanyContactsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
   var companyID = $stateParams.companyID;
 
   $scope.viewCompanyContacts = function() {
@@ -470,6 +492,89 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
         console.log("There was an error!!!", error.stack);
       });
   };
+
+});
+
+////////// View Company Financials //////////
+app.controller("ViewCompanyFinancialsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+  var companyID = $stateParams.companyID;
+
+  // Open modal panel to create contact
+  $scope.openEditFinancials = function () {
+    // Create rootScope variable to pass information to another controller
+    $rootScope.rootScopeCompanyID = companyID;
+
+    ngDialog.open({
+      template: "views/company/edit_company_financials.html",
+      controller: "viewCompanyFinancialsController",
+      className: "ngdialog-theme-default",
+      closeByEscape: true,
+      showClose: true,
+      width: 850
+    });
+  };
+
+});
+
+
+app.controller("viewCompanyFinancialsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+  var companyID = $stateParams.companyID;
+  $rootScope.rootScopeCompanyID = companyID;
+  var userID = $scope.logged_user._id;
+
+  console.log("company ID is: ", companyID);
+
+  AT_Factory.viewCompanyFinancials(companyID)
+    .then(function(company) {
+      $scope.company = company.data.company;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+
+
+  $scope.editCompanyFinancials = function() {
+    var company_information = $scope.company;
+    console.log("rootScopeCompanyID", $rootScope.rootScopeCompanyID);
+
+    AT_Factory.editCompanyFinancials(userID, companyID, company_information)
+      .then(function(success) {
+        // console.log("We were successful: ", success);
+        $state.go("view_company", {companyID: $rootScope.rootScopeCompanyID});
+        // Close modal dialog if open
+        ngDialog.close();
+        $rootScope.rootScopeCompanyID = null;
+        // Reload view to show the new financials
+        $state.reload();
+      });
+      // .catch(function() {
+      //   console.log("There was an error!!!", error.stack);
+      // });
+  };
+
+
+  // AT_Factory.viewOneContact(contactID)
+  //   .then(function(contact) {
+  //     $scope.contact = contact.data.contact;
+  //     $scope.contactOwner = contact.data.contactOwner;
+  //   })
+  //   .catch(function(error) {
+  //     console.log("There was an error!!!", error.stack);
+  //   });
+  //
+  // $scope.editContact = function() {
+  //   var contact_information = $scope.contact;
+  //   // console.log("Contact information: ", contact_information);
+  //   var userID = $scope.logged_user._id;
+  //   AT_Factory.editContact(userID, contact_information)
+  //     .then(function(success) {
+  //       // console.log("We were successful: ", success);
+  //       $state.go("view_company", {companyID: contact_information.company});
+  //     })
+  //     .catch(function(error) {
+  //       console.log("There was an error!!!", error.stack);
+  //     });
+  // };
 
 });
 
@@ -582,7 +687,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
     name: "view_company.contacts",
     url: "/contacts",
     templateUrl: "views/contact/company_contacts.html",
-    controller: "ViewCompanyContacts"
+    controller: "ViewCompanyContactsController"
+  })
+  .state({
+    name: "view_company.financials",
+    url: "/financials",
+    templateUrl: "views/company/company_financials.html",
+    controller: "ViewCompanyFinancialsController"
   })
   .state({
     name: "edit_company",
@@ -610,5 +721,5 @@ app.config(function($stateProvider, $urlRouterProvider) {
   })
   ;
 
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/companies");
 });

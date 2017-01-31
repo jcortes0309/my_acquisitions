@@ -150,6 +150,29 @@ const Company = mongoose.model("Company", {
   description: {
     type: String
   },
+  revenue: {
+    type: String,
+    default: ""
+  },
+  expenses: {
+    type: String,
+    default: ""
+  },
+  debt: {
+    type: String,
+    default: ""
+  },
+  cash_flow: {
+    type: String,
+    default: ""
+  },
+  pe_ratio: {
+    type: String,
+    default: ""
+  },
+  financials_description: {
+    type: String
+  },
   contacts: [{
     type: mongoose.Schema.Types.ObjectId
   }],
@@ -439,6 +462,42 @@ app.post("/company/remove", function (request, response) {
     });
 
 });
+
+////////// Edit Company Financials //////////
+app.post("/company/financials/edit", function (request, response) {
+  let userID = request.body.userID;
+  let companyID = request.body.companyID;
+  let queryCompany = { _id: companyID };
+
+  console.log("This is the request sent from the front end: ", request.body);
+
+  return Company.findOneAndUpdate(queryCompany,
+    {
+      $set: {
+        revenue: request.body.companyInformation.revenue,
+        expenses: request.body.companyInformation.expenses,
+        debt: request.body.companyInformation.debt,
+        cash_flow: request.body.companyInformation.cash_flow,
+        pe_ratio: request.body.companyInformation.pe_ratio,
+        financials_description: request.body.companyInformation.financials_description,
+        updated_on: new Date(),
+        updated_by: userID
+      }
+    })
+      .then(function(updatedCompany) {
+        response.json({
+          status: 200,
+          message: "Company updated successfully"
+        });
+      })
+      .catch(function(error) {
+        response.status(400);
+        console.log("There was an error updating that company: ", error.stack);
+      });
+
+});
+
+
 
 
 ////////// CONTACT //////////

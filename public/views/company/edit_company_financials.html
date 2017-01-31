@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+
+      <h3 class="text-center">Financials</h3>
+
+      <form class="form-horizontal" ng-submit="editCompanyFinancials()">
+        <fieldset>
+
+          <div class="form-group">
+            <div class="col-sm-5 col-sm-offset-1">
+              <label for="revenue" class="control-label">Revenue</label>
+              <input ng-model="company.revenue" type="text" class="form-control" id="revenue" name="revenue" value="" title="Please enter the company's revenue" placeholder="Revenue">
+            </div>
+
+            <div class="col-sm-5">
+              <label for="expenses" class="control-label">Expenses</label>
+              <input ng-model="company.expenses" type="text" class="form-control" id="expenses" name="expenses" value="" title="Please enter the company's expenses" placeholder="Expenses">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-5 col-sm-offset-1">
+              <label for="debt" class="control-label">Debt</label>
+              <input ng-model="company.debt" type="debt" class="form-control" id="text" name="debt" value="" title="Please enter the company's debt" placeholder="Debt">
+            </div>
+
+            <div class="col-sm-5">
+              <label for="cash_flow" class="control-label">Cash Flow</label>
+              <input ng-model="company.cash_flow" type="text" class="form-control" id="cash_flow" name="cash_flow" value="" title="Please enter the company's cash flow" placeholder="Cash Flow">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-5 col-sm-offset-1">
+              <label for="pe_ratio" class="control-label">P/E Ratio</label>
+              <input ng-model="company.pe_ratio" type="text" class="form-control" id="pe_ratio" name="pe_ratio" value="" title="Please enter the company's P/E ratio" placeholder="P/E Ratio">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-1">
+              <label for="financials_description" class="control-label">Financials' Description</label>
+              <textarea ng-model="company.financials_description" name="financials_description" class="form-control" id="financials_description" title="Please enter a financials description" placeholder="Financials' Description" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-1">
+              <button class="btn btn-success btn-sm btn-block spacer" type="submit" name="button">Save</button>
+            </div>
+
+          </div>
+
+        </fieldset>
+
+      </form>
+
+    </div>
+  </div>
+</div>

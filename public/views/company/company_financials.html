@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+
+      <div class="panel panel-default">
+
+        <div class="panel-heading clearfix">
+          <h3 class="panel-title pull-left">Financials</h3>
+          <div class="btn-group pull-right">
+            <a ng-click="openEditFinancials()" class="btn btn-success">
+              <i class="fa fa-edit"></i>
+              <span>Edit</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr class="active">
+                <th>Details</th>
+                <th>Amount *</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Revenue</td>
+                <td>{{ company.revenue | number}}</td>
+              </tr>
+              <tr>
+                <td>Expenses</td>
+                <td>{{ company.expenses | number}}</td>
+              </tr>
+              <tr>
+                <td>Debt</td>
+                <td>{{ company.debt | number}}</td>
+              </tr>
+              <tr>
+                <td>Cash Flow</td>
+                <td>{{ company.cash_flow | number}}</td>
+              </tr>
+              <tr>
+                <td>P/E Ratio</td>
+                <td>{{ company.pe_ratio | number}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-xs-12 spacer">
+          <br>
+          <p><small>* All numbers in millions (Except for P/E Ratio)</small></p>
+        </div>
+        <div class="col-xs-12">
+          <div>
+            <h4>Financials Description</h4>
+            <p class="well">{{ company.financials_description }}</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
