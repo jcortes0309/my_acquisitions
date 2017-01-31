@@ -49,7 +49,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Register a user
   service.register = function(user_registration) {
-    // console.log("In the factory with the user_registration info: ", user_registration);
     return $http({
       method: "POST",
       url: "/user/register",
@@ -59,7 +58,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Login a user
   service.login = function(login_information) {
-    // console.log("In the factory with the login_information info: ", login_information);
     return $http({
       method: "POST",
       url: "/user/login",
@@ -82,7 +80,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Track a company
   service.trackCompany = function(userID, companyInformation) {
-    // console.log("In the factory with: ", companyInformation);
     return $http({
       method: "POST",
       url: "/company/track",
@@ -104,7 +101,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Edit company
   service.editCompany = function(userID, companyInformation) {
-    console.log("Company information in the factory: ", companyInformation);
     return $http({
       method: "POST",
       url: "/company/edit",
@@ -141,7 +137,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // View one contact
   service.viewOneContact = function(contactID) {
-    console.log("In the factory with contactID: ", contactID);
     return $http({
       method: "GET",
       url: "/contact/view/" + contactID
@@ -150,7 +145,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Edit contact
   service.editContact = function(userID, contactInformation) {
-    console.log("In the factory with contactInformation: ", contactInformation);
     return $http({
       method: "POST",
       url: "/contact/edit",
@@ -282,15 +276,15 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
   $scope.viewCompanies();
 
   $scope.trackCompany = function() {
-    console.log("Clicked the trackCompany button");
+    // console.log("Clicked the trackCompany button");
     $state.go("track_company");
   };
 
   $scope.removeCompany = function(companyID) {
-    console.log("Clicked the remove button: ", companyID);
+    // console.log("Clicked the remove button: ", companyID);
     AT_Factory.removeCompany(companyID)
       .then(function(companyRemoved) {
-        console.log("company removed: ", companyRemoved);
+        // console.log("company removed: ", companyRemoved);
         // Call viewCompanies after removing a company
         $scope.viewCompanies();
       })
@@ -341,10 +335,10 @@ app.controller("ViewCompanyController", function($scope, $state, $stateParams, A
     });
 
   $scope.removeCompany = function(companyID) {
-    console.log("Clicked the remove button: ", companyID);
+    // console.log("Clicked the remove button: ", companyID);
     AT_Factory.removeCompany(companyID)
       .then(function(companyRemoved) {
-        console.log("company removed: ", companyRemoved);
+        // console.log("company removed: ", companyRemoved);
         // Call viewCompanies after removing a company
         $state.go("companies");
       })
@@ -363,7 +357,7 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
   AT_Factory.viewCompany(companyID)
     .then(function(company) {
       $scope.company = company.data.company;
-      console.log($scope.company);
+      // console.log($scope.company);
       $scope.companyOwner = company.data.companyOwner;
     })
     .catch(function(error) {
@@ -372,11 +366,11 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
 
   $scope.editCompany = function() {
     var company_information = $scope.company;
-    console.log("Company information: ", company_information);
+    // console.log("Company information: ", company_information);
     var userID = $scope.logged_user._id;
     AT_Factory.editCompany(userID, company_information)
       .then(function(success) {
-        console.log("We were successful: ", success);
+        // console.log("We were successful: ", success);
         $state.go("view_company", {companyID: company_information._id});
       })
       .catch(function(error) {
@@ -390,12 +384,12 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
 ////////// CONTACT CONTROLLERS //////////
 ////////// View Contacts //////////
 app.controller("ContactsController", function($scope, $state, $rootScope, AT_Factory, ngDialog) {
-  console.log("Using the ContactsController");
+  // console.log("Using the ContactsController");
 
   $scope.viewContacts = function() {
     AT_Factory.viewContacts()
       .then(function(contactsInformation) {
-        console.log("contactsInformation: ", contactsInformation);
+        // console.log("contactsInformation: ", contactsInformation);
         $scope.contacts = contactsInformation.data.contacts;
         $scope.companies = contactsInformation.data.companies;
       })
@@ -414,7 +408,7 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 
   AT_Factory.createContact(userID, companyID, contact_information)
     .then(function(success) {
-      console.log("We were successful: ", success);
+      // console.log("We were successful: ", success);
       // Call viewContacts after adding contact
       $scope.viewContacts();
       // Clear rootScope variable used to pass information to this controller
@@ -433,13 +427,11 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
   var companyID = $stateParams.companyID;
 
-  console.log("companyID is: ", companyID);
-
   $scope.viewCompanyContacts = function() {
     AT_Factory.viewCompanyContacts(companyID)
       .then(function(contacts) {
         $scope.contacts = contacts.data.contacts;
-        console.log("contacts: ", $scope.contacts);
+        // console.log("contacts: ", $scope.contacts);
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);
@@ -465,16 +457,12 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
   };
 
   $scope.editContact = function(contactID) {
-    console.log("Clicked the edit contact button: ", contactID);
-
     $state.go("edit_contact", {contactID: contactID});
   };
 
   $scope.removeContact = function(contactID) {
-    console.log("Clicked the remove button: ", contactID);
     AT_Factory.removeContact(contactID)
       .then(function(contactRemoved) {
-        console.log("contact removed: ", contactRemoved);
         // Reload view to show the contacts after removing one
         $state.reload();
       })
@@ -492,11 +480,9 @@ app.controller("CreateContactController", function($scope, $state, $rootScope, A
   var companyID = $rootScope.rootScopeCompanyID;
   var contact_information = $scope.contact;
 
-  console.log("The company ID is: ", companyID);
-
   AT_Factory.createContact(userID, companyID, contact_information)
     .then(function(success) {
-      console.log("We were successful: ", success);
+      // console.log("We were successful: ", success);
       // Clear rootScope variable used to pass information to this controller
       $rootScope.rootScopeCompanyID = null;
       // Close modal dialog if open
@@ -515,15 +501,11 @@ app.controller("CreateContactController", function($scope, $state, $rootScope, A
 
 ////////// Edit Contact //////////
 app.controller("EditContactController", function($scope, $state, $stateParams, AT_Factory) {
-  console.log("Using the EditContactController");
   var contactID = $stateParams.contactID;
-  console.log("contact ID is: ", contactID);
 
   AT_Factory.viewOneContact(contactID)
     .then(function(contact) {
-      console.log("contact: ", contact);
       $scope.contact = contact.data.contact;
-      console.log($scope.contact);
       $scope.contactOwner = contact.data.contactOwner;
     })
     .catch(function(error) {
@@ -532,11 +514,11 @@ app.controller("EditContactController", function($scope, $state, $stateParams, A
 
   $scope.editContact = function() {
     var contact_information = $scope.contact;
-    console.log("Contact information: ", contact_information);
+    // console.log("Contact information: ", contact_information);
     var userID = $scope.logged_user._id;
     AT_Factory.editContact(userID, contact_information)
       .then(function(success) {
-        console.log("We were successful: ", success);
+        // console.log("We were successful: ", success);
         $state.go("view_company", {companyID: contact_information.company});
       })
       .catch(function(error) {

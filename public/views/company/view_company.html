@@ -97,14 +97,14 @@
                       <i class="fa fa-user-o fa-fw"></i>
                       company owner
                       <span ng-show="companyOwner.first_name" class="details-info">
-                        <a ui-sref="view_user({userID: company.ownerID})">
-                          {{ companyOwner.salutation }} {{ companyOwner.first_name }} {{ companyOwner.last_name }}
-                        </a>
+                        <!-- <a ui-sref="view_user({userID: company.ownerID})"> -->
+                        {{ companyOwner.salutation }} {{ companyOwner.first_name }} {{ companyOwner.last_name }}
+                        <!-- </a> -->
                       </span>
                       <span ng-hide="companyOwner.first_name" class="details-info">
-                        <a ui-sref="view_user({userID: company.ownerID})">
-                          {{ companyOwner.username }}
-                        </a>
+                        <!-- <a ui-sref="view_user({userID: company.ownerID})"> -->
+                        {{ companyOwner.username }}
+                        <!-- </a> -->
                       </span>
                     </div>
                   </li>
