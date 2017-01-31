@@ -31,7 +31,6 @@
               <th><a href="" ng-click="orderByField='email'; reverseSort = !reverseSort">Email</a></th>
               <th><a href="" ng-click="orderByField='phone'; reverseSort = !reverseSort">Phone</a></th>
               <th><a href="" ng-click="orderByField='company'; reverseSort = !reverseSort">Company</a></th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -45,23 +44,8 @@
                 </a>
               </td>
               <td>{{ contact.phone }}</td>
-              <td>{{ contact.company }}</td>
               <td>
-                <span class="dropdown">
-                <span class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></span>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li>
-                    <a ui-sref="view_contact({contactID: contact._id})">View</a>
-                  </li>
-                  <li>
-                    <a ui-sref="edit_contact({contactID: contact._id})">Edit</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <a ng-click="removeCompany(contact._id)" class="pointerCursor remove">Remove</a>
-                  </li>
-                </ul>
-                </span>
+                <a data="{{ contact.company }}" ui-sref="view_company({companyID: contact.company})">{{ contact.company }}</a>
               </td>
             </tr>
           </tbody>

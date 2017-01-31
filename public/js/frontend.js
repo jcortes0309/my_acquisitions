@@ -139,6 +139,28 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
     });
   };
 
+  // View one contact
+  service.viewOneContact = function(contactID) {
+    console.log("In the factory with contactID: ", contactID);
+    return $http({
+      method: "GET",
+      url: "/contact/view/" + contactID
+    });
+  };
+
+  // Edit contact
+  service.editContact = function(userID, contactInformation) {
+    console.log("In the factory with contactInformation: ", contactInformation);
+    return $http({
+      method: "POST",
+      url: "/contact/edit",
+      data: {
+        userID: userID,
+        contactInformation: contactInformation
+      }
+    });
+  };
+
   // View company contacts
   service.viewCompanyContacts = function(companyID) {
     return $http({
@@ -281,11 +303,6 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
 
 ////////// Track Company //////////
 app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ngDialog) {
-  var companyID = $stateParams.companyID;
-  console.log("companyID: ", companyID);
-
-  // Close modal dialog if open
-  ngDialog.close();
 
   $scope.trackCompany = function() {
   var company_information = $scope.company;
@@ -390,20 +407,6 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
   // Call viewContacts after loading page
   $scope.viewContacts();
 
-  // // Open modal panel to create contact
-  // $scope.openCreateContact = function (companyID) {
-  //   // Create rootScope variable to pass information to another controller
-  //   $rootScope.rootScopeCompanyID = companyID;
-  //
-  //   ngDialog.open({
-  //     template: "views/contact/create_contact.html",
-  //     controller: "ContactsController",
-  //     className: "ngdialog-theme-default",
-  //     closeByEscape: true,
-  //     width: 850
-  //   });
-  // };
-
   $scope.createContact = function() {
   var userID = $scope.logged_user._id;
   var companyID = $rootScope.rootScopeCompanyID;
@@ -461,6 +464,12 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
     });
   };
 
+  $scope.editContact = function(contactID) {
+    console.log("Clicked the edit contact button: ", contactID);
+
+    $state.go("edit_contact", {contactID: contactID});
+  };
+
   $scope.removeContact = function(contactID) {
     console.log("Clicked the remove button: ", contactID);
     AT_Factory.removeContact(contactID)
@@ -503,6 +512,40 @@ app.controller("CreateContactController", function($scope, $state, $rootScope, A
   };
 
 });
+
+////////// Edit Contact //////////
+app.controller("EditContactController", function($scope, $state, $stateParams, AT_Factory) {
+  console.log("Using the EditContactController");
+  var contactID = $stateParams.contactID;
+  console.log("contact ID is: ", contactID);
+
+  AT_Factory.viewOneContact(contactID)
+    .then(function(contact) {
+      console.log("contact: ", contact);
+      $scope.contact = contact.data.contact;
+      console.log($scope.contact);
+      $scope.contactOwner = contact.data.contactOwner;
+    })
+    .catch(function(error) {
+      console.log("There was an error!!!", error.stack);
+    });
+
+  $scope.editContact = function() {
+    var contact_information = $scope.contact;
+    console.log("Contact information: ", contact_information);
+    var userID = $scope.logged_user._id;
+    AT_Factory.editContact(userID, contact_information)
+      .then(function(success) {
+        console.log("We were successful: ", success);
+        $state.go("view_company", {companyID: contact_information.company});
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
+  };
+
+});
+
 
 
 
@@ -576,6 +619,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: "/Contact/create",
     templateUrl: "views/contact/create_contact.html",
     controller: "CreateContactController"
+  })
+  .state({
+    name: "edit_contact",
+    url: "/Contact/edit/{contactID}",
+    templateUrl: "views/contact/edit_contact.html",
+    controller: "EditContactController"
   })
   ;
 

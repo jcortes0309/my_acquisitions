@@ -476,6 +476,64 @@ app.get("/contacts/view", function(request, response) {
     });
 });
 
+////////// View one contact //////////
+app.get("/contact/view/:contactID", function(request, response) {
+  let contactID = request.params.contactID;
+
+  console.log("In the backend with: ", contactID);
+
+  Contact.findById(contactID)
+    .then(function(contact) {
+      console.log("This is the contact: ", contact);
+      response.json({
+        contact: contact
+      });
+    })
+    .catch(function(error) {
+      response.status(500) ;
+      response.json({
+        message: "Error trying to get the contact"
+      });
+    });
+
+});
+
+////////// Edit contact //////////
+app.post("/contact/edit", function(request, response) {
+  let userID = request.body.userID;
+  let contactID = request.body.contactInformation._id;
+  let queryContact = { _id: contactID };
+
+  console.log("\n\nbody information: ", request.body);
+
+  return Contact.findOneAndUpdate(queryContact,
+    {
+      $set: {
+        first_name: request.body.contactInformation.first_name,
+        last_name: request.body.contactInformation.last_name,
+        email: request.body.contactInformation.email,
+        phone: request.body.contactInformation.phone,
+        title: request.body.contactInformation.title,
+        type: request.body.contactInformation.type,
+        description: request.body.contactInformation.description,
+        ownerID: userID,
+        updated_on: new Date(),
+        updated_by: userID
+      }
+    }
+  )
+    .then(function(contact) {
+      console.log("\n\nContact updated: ", contact);
+      response.json({
+        contact: contact,
+      });
+    })
+    .catch(function(error) {
+      response.status(500);
+      console.log("There was an error updating the contact: ", error.stack);
+    });
+});
+
 ////////// View company contacts //////////
 app.get("/company/contacts/view/:companyID", function(request, response) {
   let companyID = request.params.companyID;
