@@ -117,7 +117,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Delete company
   service.removeCompany = function(companyID) {
-    console.log("Company ID in the factory: ", companyID);
     return $http({
       method: "POST",
       url: "/company/remove",
@@ -150,7 +149,6 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
 
   // Create contact
   service.createContact = function(userID, companyID, contactInformation) {
-    console.log("In the factory with: ", contactInformation);
     return $http({
       method: "POST",
       url: "/contact/create",
@@ -158,6 +156,17 @@ app.factory("AT_Factory", function($http, $state, $rootScope, $cookies) {
         userID: userID,
         companyID: companyID,
         contactInformation: contactInformation
+      }
+    });
+  };
+
+  // Remove contact
+  service.removeContact = function(contactID) {
+    return $http({
+      method: "POST",
+      url: "/contact/remove",
+      data: {
+        contactID: contactID
       }
     });
   };
@@ -450,6 +459,19 @@ app.controller("ViewCompanyContacts", function($scope, $state, $rootScope, $stat
       showClose: true,
       width: 850
     });
+  };
+
+  $scope.removeContact = function(contactID) {
+    console.log("Clicked the remove button: ", contactID);
+    AT_Factory.removeContact(contactID)
+      .then(function(contactRemoved) {
+        console.log("contact removed: ", contactRemoved);
+        // Reload view to show the contacts after removing one
+        $state.reload();
+      })
+      .catch(function(error) {
+        console.log("There was an error!!!", error.stack);
+      });
   };
 
 });

@@ -37,11 +37,13 @@
           <tbody>
             <tr ng-repeat="contact in contacts | filter: searchKeyword | orderBy:orderByField:reverseSort">
               <td>
-                <a ui-sref="view_contact({contactID: contact._id})">
-                  {{ contact.first_name }} {{ contact.last_name }}
+                {{ contact.first_name }} {{ contact.last_name }}
+              </td>
+              <td>
+                <a href="mailto:{{ contact.email }}">
+                  {{ contact.email }}
                 </a>
               </td>
-              <td>{{ contact.email }}</td>
               <td>{{ contact.phone }}</td>
               <td>{{ contact.company }}</td>
               <td>

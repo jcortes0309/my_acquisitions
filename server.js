@@ -435,7 +435,7 @@ app.post("/company/remove", function (request, response) {
     })
     .catch(function(error) {
       response.status(400);
-      console.log("There was an error updating that company: ", error.stack);
+      console.log("There was an error removing that company: ", error.stack);
     });
 
 });
@@ -496,21 +496,6 @@ app.get("/company/contacts/view/:companyID", function(request, response) {
       console.log("There was an error looking for that company: ", error.stack);
     });
 
-  // return Company.findById(companyID)
-  //   .then(function(company) {
-  //     return User.findById(company.created_by)
-  //       .then(function(user) {
-  //         console.log("This is the user: ", user);
-  //         response.json({
-  //           company: company,
-  //           companyOwner: user
-  //         });
-  //       });
-  //   })
-  //   .catch(function(error) {
-  //     response.status(400);
-  //     console.log("There was an error looking for that company: ", error.stack);
-  //   });
 });
 
 ////////// Create contact //////////
@@ -549,6 +534,23 @@ app.post("/contact/create", function(request, response) {
 
 });
 
+////////// Remove contact //////////
+app.post("/contact/remove", function(request, response) {
+  let contactID = request.body.contactID;
+
+  return Contact.findByIdAndRemove(contactID)
+    .then(function(contactRemoved) {
+      console.log("contactRemoved: ", contactRemoved);
+      response.json({
+        contactRemoved: contactRemoved
+      });
+    })
+    .catch(function(error) {
+      response.status(400);
+      console.log("There was an error removing that contact: ", error.stack);
+    });
+
+});
 
 
 

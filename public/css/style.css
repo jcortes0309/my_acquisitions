@@ -139,6 +139,17 @@ i.menu {
   margin-top: 35px;
 }
 
+/* Remove > from contact card shown in the company profile page */
+a.list-group-item:before {
+  content: " " !important;
+}
+
+/* Remove margins from the hr element */
+hr.hr-small-margins {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
 
 /*
  * ngDialog Styles

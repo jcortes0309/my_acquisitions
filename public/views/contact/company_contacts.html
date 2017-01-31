@@ -18,9 +18,29 @@
           </div>
 
           <div ng-repeat="contact in contacts" class="list-group">
-            <a class="list-group-item" href="#">
-              <h4 class="list-group-item-heading">{{ contact.first_name }} {{ contact.last_name }}</h4>
-              <p class="list-group-item-text">{{ contact.email }}</p>
+            <a class="list-group-item">
+              <div class="row">
+                <div class="col-sm-6">
+                  <!-- <i class="fa fa-3x fa-building-o pull-left"></i> -->
+                  <h4 class="list-group-item-heading">{{ contact.first_name }} {{ contact.last_name }}</h4>
+                  <p class="list-group-item-text">
+                    {{ contact.email }}
+                  </p>
+                </div>
+                <div class="col-sm-6">
+                  <p class="list-group-item-text capitalize"><strong>Type:</strong> {{ contact.type }}</p>
+                  <p class="list-group-item-text"><strong>Phone:</strong> {{ contact.phone }}</p>
+                </div>
+              </div>
+              <hr class="hr-small-margins">
+              <div class="row">
+                <div class="col-sm-6">
+                  <button class="btn btn-success btn-sm btn-block spacer" type="button" name="button">Edit</button>
+                </div>
+                <div class="col-sm-6">
+                  <button ng-click="removeContact(contact._id)" class="btn btn-danger btn-sm btn-block spacer" type="button" name="button">Remove</button>
+                </div>
+              </div>
             </a>
           </div>
 
