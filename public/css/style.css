@@ -6,6 +6,11 @@ body {
   background-color: #FFF;
 }
 
+/* This code, combined with the footer height will help keep the footer at the bottom of the page all the time */
+.main-content {
+  min-height: calc(100vh - 200px);
+}
+
 textarea {
   width: 100%;
 }
@@ -163,14 +168,22 @@ hr.hr-small-margins {
  * Footer Styles
  */
 footer {
- 	background: #F4F4F4;
+ 	background: #949090;
  	height: 90px;
- 	color: #04519B;
+ 	color: #000;
  	font-weight: bold;
  	text-align: center;
  	padding-top: 30px;
  	margin-top: 30px;
- 	border-top: 5px solid #04519B;
+ 	border-top: 5px solid #000;
+}
+
+footer a {
+  color: #FFF;
+}
+
+footer span {
+  color: #00A7FF;
 }
 
 
@@ -182,6 +195,11 @@ footer {
 @media only screen and (max-width : 992px) {
   #search {
     padding: 20px 0 10px 0;
+  }
+
+  /* Remove sticky footer when viewing in small devices */
+  footer {
+    position: relative;
   }
 }
 
@@ -210,3 +228,8 @@ footer {
   }
 
  }
+
+ /* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+
+}
