@@ -103,6 +103,20 @@
     </nav>
 
     <div class="main-content">
+      <!--
+      5000ms as the default duration to show flash message.
+      Show the close button (x on the right).
+      Call myCallback with flash dismissed as parameter when flash has been dismissed.
+      -->
+      <!-- <flash-message
+        class="text-center"
+        duration="5000"
+        show-close="true"
+        on-dismiss="myCallback(flash);"
+      ></flash-message> -->
+      <div class="container">
+        <flash-message></flash-message>
+      </div>
       <ui-view></ui-view>
     </div>
 
@@ -129,9 +143,10 @@
     <script type="text/javascript"  src="./libs/angular-moment/angular-moment.min.js"></script>
 
     <!-- ngDialog -->
-    <script type="text/javascript" src="./libs/ng-dialog/js/ngDialog.min.js">
+    <script type="text/javascript" src="./libs/ng-dialog/js/ngDialog.min.js"></script>
 
-    </script>
+    <!-- angular-flash -->
+    <script type="text/javascript" src="./libs/angular-flash-alert/dist/angular-flash.min.js"></script>
 
     <!-- Custom JS -->
     <script type="text/javascript" src="./js/frontend.js"></script>

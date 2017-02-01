@@ -11,7 +11,7 @@ $(document).on('click','.navbar-collapse.in',function(e) {
   }
 });
 
-var app = angular.module("acquisitions_tracker", ["ui.router", "ngCookies", "angularMoment", "ngDialog"]);
+var app = angular.module("acquisitions_tracker", ["ui.router", "ngCookies", "angularMoment", "ngDialog", "ngFlash"]);
 
 
 app.run(function($rootScope, $state, $cookies, ngDialog) {
@@ -276,6 +276,16 @@ app.controller("DashboardController", function($scope, AT_Factory) {
 ////////// USER CONTROLLERS //////////
 ////////// Register //////////
 app.controller("RegisterController", function($scope, $state, AT_Factory) {
+  successAlert = function (username) {
+      var message = "<strong>Successful registration!</strong>  Please login into the application";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
+
+  failureAlert = function () {
+      var message = "<strong>Registration failed!</strong> Please try again!";
+      var id = Flash.create("danger", message, 5000, {class: "text-center"}, true);
+  };
+
   $scope.user = {};
 
   $scope.register = function() {
@@ -287,9 +297,15 @@ app.controller("RegisterController", function($scope, $state, AT_Factory) {
       AT_Factory.register(user_registration)
         .then(function(success) {
           $state.go("login");
+
+          // Show success message after registering
+          successAlert(username);
         })
         .catch(function(error) {
           console.log("There was an error!!!", error.stack);
+
+          // Show error message
+          failureAlert();
         });
     } else {
       return;
@@ -298,7 +314,17 @@ app.controller("RegisterController", function($scope, $state, AT_Factory) {
 });
 
 ////////// Login //////////
-app.controller("LoginController", function($scope, $state, $cookies, $rootScope, AT_Factory) {
+app.controller("LoginController", function($scope, $state, $cookies, $rootScope, AT_Factory, Flash) {
+  successAlert = function (username) {
+      var message = "<strong>Welcome " + username + "!</strong>";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
+
+  failureAlert = function () {
+      var message = "<strong>Login failed!</strong> Invalid username or password.";
+      var id = Flash.create("danger", message, 5000, {class: "text-center"}, true);
+  };
+
   $scope.user = {
     username: "",
     password: ""
@@ -311,10 +337,17 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
         $cookies.putObject("at_cd", logged_user);
         $rootScope.at_cd = logged_user;
         $rootScope.logged_user = $rootScope.at_cd.data.user;
+        var username = $rootScope.logged_user.username;
         $state.go("home");
+
+        // Show success message after login into the application
+        successAlert(username);
       })
       .catch(function(error) {
         console.log("There was an error!!!", error);
+
+        // Show error message
+        failureAlert();
       });
   };
 });
@@ -322,7 +355,12 @@ app.controller("LoginController", function($scope, $state, $cookies, $rootScope,
 
 ////////// COMPANY CONTROLLERS //////////
 ////////// View Companies //////////
-app.controller("CompaniesController", function($scope, $state, AT_Factory) {
+app.controller("CompaniesController", function($scope, $state, AT_Factory, Flash) {
+  successAlert = function () {
+      var message = "Company removed successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
+
   $scope.viewCompanies = function() {
     AT_Factory.viewCompanies()
       .then(function(companies) {
@@ -348,6 +386,9 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
         // console.log("company removed: ", companyRemoved);
         // Call viewCompanies after removing a company
         $scope.viewCompanies();
+
+        // Show alert message when removing a company successfully
+        successAlert();
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);
@@ -357,7 +398,11 @@ app.controller("CompaniesController", function($scope, $state, AT_Factory) {
 });
 
 ////////// Track Company //////////
-app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ngDialog) {
+app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ngDialog, Flash) {
+  successAlert = function () {
+      var message = "Company added successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
 
   $scope.trackCompany = function() {
   var company_information = $scope.company;
@@ -369,6 +414,9 @@ app.controller("TrackCompanyController", function($scope, $state, AT_Factory, ng
     .then(function(success) {
       console.log("We were successful: ", success);
       $state.go("companies");
+
+      // Show alert message when adding a company successfully
+      successAlert();
     })
     .catch(function(error) {
       console.log("There was an error!!!", error.stack);
@@ -411,9 +459,13 @@ app.controller("ViewCompanyController", function($scope, $state, $stateParams, A
 });
 
 ////////// Edit Company //////////
-app.controller("EditCompanyController", function($scope, $state, $stateParams, AT_Factory) {
-  // console.log("Using the EditCompanyController");
+app.controller("EditCompanyController", function($scope, $state, $stateParams, AT_Factory, Flash) {
   var companyID = $stateParams.companyID;
+
+  successAlert = function () {
+      var message = "Company updated successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
 
   AT_Factory.viewCompany(companyID)
     .then(function(company) {
@@ -433,6 +485,9 @@ app.controller("EditCompanyController", function($scope, $state, $stateParams, A
       .then(function(success) {
         // console.log("We were successful: ", success);
         $state.go("view_company", {companyID: company_information._id});
+
+        // Show alert message when updating company successfully
+        successAlert();
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);
@@ -485,8 +540,13 @@ app.controller("ContactsController", function($scope, $state, $rootScope, AT_Fac
 });
 
 ////////// View Company Contacts //////////
-app.controller("ViewCompanyContactsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+app.controller("ViewCompanyContactsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog, Flash) {
   var companyID = $stateParams.companyID;
+
+  successAlert = function () {
+      var message = "Contact removed successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
 
   $scope.viewCompanyContacts = function() {
     AT_Factory.viewCompanyContacts(companyID)
@@ -526,6 +586,9 @@ app.controller("ViewCompanyContactsController", function($scope, $state, $rootSc
       .then(function(contactRemoved) {
         // Reload view to show the contacts after removing one
         $state.reload();
+
+        // Show alert message when removing customer successfully
+        successAlert();
       })
       .catch(function(error) {
         console.log("There was an error!!!", error.stack);
@@ -556,12 +619,15 @@ app.controller("ViewCompanyFinancialsController", function($scope, $state, $root
 });
 
 
-app.controller("viewCompanyFinancialsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog) {
+app.controller("viewCompanyFinancialsController", function($scope, $state, $rootScope, $stateParams, AT_Factory, ngDialog, Flash) {
   var companyID = $stateParams.companyID;
   $rootScope.rootScopeCompanyID = companyID;
   var userID = $scope.logged_user._id;
 
-  console.log("company ID is: ", companyID);
+  successAlert = function () {
+      var message = "Financials updated successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
 
   AT_Factory.viewCompanyFinancials(companyID)
     .then(function(company) {
@@ -585,6 +651,9 @@ app.controller("viewCompanyFinancialsController", function($scope, $state, $root
         $rootScope.rootScopeCompanyID = null;
         // Reload view to show the new financials
         $state.reload();
+
+        // Show alert message when updating company financials
+        successAlert();
       });
       // .catch(function() {
       //   console.log("There was an error!!!", error.stack);
@@ -594,7 +663,12 @@ app.controller("viewCompanyFinancialsController", function($scope, $state, $root
 });
 
 ////////// Create Contact //////////
-app.controller("CreateContactController", function($scope, $state, $rootScope, AT_Factory, ngDialog) {
+app.controller("CreateContactController", function($scope, $state, $rootScope, AT_Factory, ngDialog, Flash) {
+  successAlert = function () {
+      var message = "Contact added successfully";
+      var id = Flash.create("success", message, 5000, {class: "text-center"}, true);
+  };
+
   $scope.createContact = function() {
   var userID = $scope.logged_user._id;
   var companyID = $rootScope.rootScopeCompanyID;
@@ -610,6 +684,9 @@ app.controller("CreateContactController", function($scope, $state, $rootScope, A
 
       // Reload view to show the new contacts
       $state.reload();
+
+      // Show alert message when adding customer successfully
+      successAlert();
 
     })
     .catch(function(error) {
@@ -650,7 +727,6 @@ app.controller("EditContactController", function($scope, $state, $stateParams, A
 
 
 
-
 ////////////////////////////
 ////////// ROUTES //////////
 ////////////////////////////
@@ -662,12 +738,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: "views/general/dashboard.html",
     controller: "DashboardController"
   })
-  // .state({
-  //   name: "dashboard",
-  //   url: "/dashboard",
-  //   templateUrl: "views/general/dashboard.html",
-  //   controller: "DashboardController"
-  // })
   .state({
     name: "register",
     url: "/User/register",

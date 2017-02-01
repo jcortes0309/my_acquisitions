@@ -275,6 +275,7 @@ app.post("/user/register", function(request, response) {
     })
     .catch(function(error) {
       console.log("Didn't save because: ", error.stack);
+      response.status(401);
       response.json({
         message: "Error message: " + error.stack
       });
@@ -323,7 +324,7 @@ app.post("/user/login", function(request, response) {
         });
     })
     .catch(function(error) {
-      response.status(401) ;
+      response.status(401);
       response.json({
         message: "Error trying to login"
       });
